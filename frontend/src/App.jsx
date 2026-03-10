@@ -7,6 +7,7 @@ import Contributors from "./pages/Contributors"
 import LearningPathDetail from "./pages/LearningPathDetail"
 import TopicDetail from "./pages/TopicDetail"
 import DsaTopicRoadmap from "./pages/DsaTopicRoadmap"
+import AiMlTopicDetail from "./pages/AiMlTopicDetail"
 
 import AddProject from "./pages/AddProject";
 import ProjectDetail from "./pages/ProjectDetail";
@@ -26,6 +27,7 @@ function App() {
         <Route path="/learning-paths/:slug" element={<LearningPathDetail />} />
         <Route path="/dsa/:topicId" element={<DsaTopicRoadmap />} />
         <Route path="/dsa/:topicId/:pointId" element={<TopicDetail />} />
+        <Route path="/ai-ml/:topicId" element={<AiMlTopicDetail />} />
         <Route path="/add-project" element={<AddProject />} />
         <Route path="/projects/:id" element={<ProjectDetail />} />
         <Route path="/signin" element={<SignIn />} />
