@@ -8,7 +8,6 @@ import LearningPathDetail from "./pages/LearningPathDetail"
 import TopicDetail from "./pages/TopicDetail"
 import DsaTopicRoadmap from "./pages/DsaTopicRoadmap"
 import CssOverview from "./pages/CssOverview"
-import CssTopicRoadmap from "./pages/CssTopicRoadmap"
 import CssSubtopicDetail from "./pages/CssSubtopicDetail"
 
 import AddProject from "./pages/AddProject";
@@ -30,7 +29,6 @@ function App() {
         <Route path="/dsa/:topicId" element={<DsaTopicRoadmap />} />
         <Route path="/dsa/:topicId/:pointId" element={<TopicDetail />} />
         <Route path="/css" element={<CssOverview />} />
-        <Route path="/css/:topicId" element={<CssTopicRoadmap />} />
         <Route path="/css/:topicId/:subtopicId" element={<CssSubtopicDetail />} />
         <Route path="/add-project" element={<AddProject />} />
         <Route path="/projects/:id" element={<ProjectDetail />} />
