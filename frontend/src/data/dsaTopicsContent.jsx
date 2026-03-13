@@ -289,6 +289,558 @@ const GenericArrayVisualizer = ({
   );
 };
 
+const StackVisualizer = ({
+  title = "Stack",
+  items = [],
+  highlightIndex,
+  note,
+  details = [],
+  topLabel = "Top",
+  bottomLabel = "Bottom",
+}) => {
+  const activeIndex =
+    highlightIndex ?? (items.length ? items.length - 1 : -1);
+  const displayItems = [...items].reverse();
+  const isEmpty = items.length === 0;
+
+  return (
+    <div className="w-full max-w-3xl mx-auto my-6 rounded-2xl border border-amber-200 dark:border-amber-900/60 bg-white dark:bg-gray-900/40 shadow-sm dark:shadow-none overflow-hidden transition-colors">
+      <div className="px-4 md:px-5 py-4 border-b border-amber-100 dark:border-amber-900/60 bg-gradient-to-r from-amber-50 via-white to-cyan-50 dark:from-amber-950/40 dark:via-gray-900 dark:to-cyan-950/30 transition-colors">
+        <h3 className="text-sm md:text-base font-bold text-amber-700 dark:text-amber-200 transition-colors">
+          {title}
+        </h3>
+        {note && (
+          <p className="text-xs md:text-sm text-gray-600 dark:text-gray-300 mt-1 transition-colors">
+            {note}
+          </p>
+        )}
+      </div>
+
+      <div className="p-4 md:p-5 flex flex-col md:flex-row items-center gap-5 md:gap-8">
+        <div className="flex flex-col items-center">
+          <div className="text-[11px] uppercase tracking-[0.3em] text-gray-500 dark:text-gray-400 transition-colors">
+            {topLabel}
+          </div>
+          <div className="mt-2 flex flex-col items-center gap-2 w-full">
+            {isEmpty ? (
+              <div className="min-w-[140px] px-4 py-2 rounded-lg border border-dashed border-gray-300 dark:border-gray-700 text-xs text-gray-500 dark:text-gray-400 text-center transition-colors">
+                Empty stack
+              </div>
+            ) : (
+              displayItems.map((value, idx) => {
+                const originalIndex = items.length - 1 - idx;
+                const isActive = originalIndex === activeIndex;
+                return (
+                  <div
+                    key={`${title}-${value}-${idx}`}
+                    className={`min-w-[140px] px-4 py-2 rounded-lg border text-sm font-semibold text-center transition-colors ${
+                      isActive
+                        ? "bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-200 border-amber-200 dark:border-amber-700"
+                        : "bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 border-gray-200 dark:border-gray-700"
+                    }`}
+                  >
+                    {value}
+                  </div>
+                );
+              })
+            )}
+          </div>
+          <div className="mt-2 text-[11px] uppercase tracking-[0.3em] text-gray-500 dark:text-gray-400 transition-colors">
+            {bottomLabel}
+          </div>
+        </div>
+
+        {details.length > 0 && (
+          <div className="flex-1 w-full">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {details.map((detail, idx) => (
+                <div
+                  key={`${title}-detail-${idx}`}
+                  className="rounded-lg border border-cyan-200 dark:border-cyan-800/60 bg-cyan-50 dark:bg-cyan-900/20 px-3 py-2 text-xs md:text-sm text-cyan-800 dark:text-cyan-200 transition-colors"
+                >
+                  {detail}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const StackMemoryVisual = () => {
+  const arrayValues = [5, 9, 12];
+  const linkedValues = [12, 9, 5];
+
+  return (
+    <div className="w-full max-w-4xl mx-auto my-6 rounded-2xl border border-cyan-200 dark:border-cyan-900/60 bg-white dark:bg-gray-900/40 shadow-sm dark:shadow-none overflow-hidden transition-colors">
+      <div className="px-4 md:px-5 py-4 border-b border-cyan-100 dark:border-cyan-900/60 bg-gradient-to-r from-cyan-50 via-white to-emerald-50 dark:from-cyan-950/40 dark:via-gray-900 dark:to-emerald-950/30 transition-colors">
+        <h3 className="text-sm md:text-base font-bold text-cyan-700 dark:text-cyan-200 transition-colors">
+          Stack memory models
+        </h3>
+        <p className="text-xs md:text-sm text-gray-600 dark:text-gray-300 mt-1 transition-colors">
+          Array-based stacks use contiguous memory, while linked-list stacks use
+          nodes.
+        </p>
+      </div>
+
+      <div className="p-4 md:p-5 grid md:grid-cols-2 gap-4">
+        <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 p-4 transition-colors">
+          <div className="text-xs font-semibold text-gray-700 dark:text-gray-200 transition-colors">
+            Array-based stack
+          </div>
+          <div className="mt-3 flex items-center justify-center gap-2">
+            {arrayValues.map((value, idx) => (
+              <div
+                key={`array-${value}-${idx}`}
+                className={`w-12 h-12 rounded-lg border flex flex-col items-center justify-center text-xs font-semibold transition-colors ${
+                  idx === arrayValues.length - 1
+                    ? "bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-200 border-amber-200 dark:border-amber-700"
+                    : "bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 border-gray-200 dark:border-gray-700"
+                }`}
+              >
+                <span className="text-[10px] text-gray-400 dark:text-gray-500 leading-none">
+                  {idx}
+                </span>
+                <span>{value}</span>
+              </div>
+            ))}
+          </div>
+          <div className="mt-2 text-[11px] text-gray-600 dark:text-gray-400 text-center transition-colors">
+            Top index = 2
+          </div>
+        </div>
+
+        <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 p-4 transition-colors">
+          <div className="text-xs font-semibold text-gray-700 dark:text-gray-200 transition-colors">
+            Linked-list stack
+          </div>
+          <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
+            {linkedValues.map((value, idx) => (
+              <div key={`node-${value}-${idx}`} className="flex items-center">
+                <div className="px-3 py-1.5 rounded-lg border border-emerald-200 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-900/30 text-xs font-semibold text-emerald-800 dark:text-emerald-200 transition-colors">
+                  {value}
+                </div>
+                {idx < linkedValues.length - 1 && (
+                  <span className="mx-2 text-xs text-gray-400 dark:text-gray-500 transition-colors">
+                    -&gt;
+                  </span>
+                )}
+              </div>
+            ))}
+            <span className="text-xs text-gray-400 dark:text-gray-500 transition-colors">
+              null
+            </span>
+          </div>
+          <div className="mt-2 text-[11px] text-gray-600 dark:text-gray-400 text-center transition-colors">
+            Head points to the top node.
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const stackVisuals = {
+  "stack-operations-overview": (
+    <StackVisualizer
+      title="Core stack operations"
+      items={[10, 20]}
+      highlightIndex={1}
+      details={["Push: add to top", "Pop: remove top", "Peek: read top"]}
+    />
+  ),
+  "stack-push": (
+    <StackVisualizer
+      title="push() adds to the top"
+      items={[5, 10, 15]}
+      highlightIndex={2}
+      note="Pushed 15"
+      details={["Top becomes 15"]}
+    />
+  ),
+  "stack-pop": (
+    <StackVisualizer
+      title="pop() removes the top"
+      items={[7, 9]}
+      highlightIndex={1}
+      note="Pop removes 9"
+      details={["Remaining top = 7"]}
+    />
+  ),
+  "stack-peek": (
+    <StackVisualizer
+      title="peek() reads the top"
+      items={[4, 8]}
+      highlightIndex={1}
+      note="Peek returns 8"
+      details={["Stack stays unchanged"]}
+    />
+  ),
+  "stack-is-empty": (
+    <StackVisualizer
+      title="isEmpty() check"
+      items={[]}
+      note="Empty stack"
+      details={["isEmpty() = true"]}
+    />
+  ),
+  "stack-is-full": (
+    <GenericArrayVisualizer
+      inputLabel="Fixed capacity stack"
+      inputArray={[1, 2, 3]}
+      outputVariable="isFull() = true"
+      description="Top index = capacity - 1"
+    />
+  ),
+  "stack-overflow": (
+    <GenericArrayVisualizer
+      inputLabel="Stack (capacity 3)"
+      inputArray={[1, 2, 3]}
+      outputVariable="Overflow"
+      description="Pushing into a full stack"
+    />
+  ),
+  "stack-underflow": (
+    <GenericArrayVisualizer
+      inputLabel="Empty stack"
+      inputArray={[]}
+      outputVariable="Underflow"
+      description="Popping from an empty stack"
+    />
+  ),
+  "stack-time-complexity": (
+    <GenericArrayVisualizer
+      inputLabel="Top-focused access"
+      inputArray={[10, 20, 30]}
+      outputVariable="All basic ops: O(1)"
+      description="Only the top is accessed"
+    />
+  ),
+  "stack-array-implementation": (
+    <StackVisualizer
+      title="Array-based stack"
+      items={[3, 6]}
+      highlightIndex={1}
+      note="Top index moves with push/pop"
+    />
+  ),
+  "stack-static": (
+    <GenericArrayVisualizer
+      inputLabel="Fixed size"
+      inputArray={[1, 2, 3]}
+      outputVariable="Capacity fixed"
+      description="No growth beyond size"
+    />
+  ),
+  "stack-overflow-handling": (
+    <GenericArrayVisualizer
+      inputLabel="Before push"
+      inputArray={[5, 9]}
+      outputVariable="push(11) -> false"
+      description="Check isFull() first"
+    />
+  ),
+  "stack-linkedlist-implementation": (
+    <StackVisualizer
+      title="Linked-list stack"
+      items={[10, 20]}
+      highlightIndex={1}
+      note="Head is the top"
+    />
+  ),
+  "stack-dynamic": (
+    <StackVisualizer
+      title="Dynamic stack"
+      items={[10, 20, 30, 40]}
+      highlightIndex={3}
+      note="Grows and shrinks with memory"
+    />
+  ),
+  "stack-memory-allocation": (
+    <GenericArrayVisualizer
+      inputLabel="Allocation"
+      inputArray={["new Node(42)"]}
+      outputVariable="Heap allocation"
+      description="Manual delete in C++"
+    />
+  ),
+  "stack-built-in": (
+    <GenericArrayVisualizer
+      inputLabel="Built-in ops"
+      inputArray={["push", "pop", "peek"]}
+      outputVariable="Ready to use"
+      description="Library-provided stack"
+    />
+  ),
+  "stack-java-class": (
+    <StackVisualizer
+      title="Java Stack"
+      items={[5, 9]}
+      highlightIndex={1}
+      note="peek() reads the top"
+    />
+  ),
+  "stack-cpp-stl": (
+    <StackVisualizer
+      title="C++ STL stack"
+      items={[1, 2, 3]}
+      highlightIndex={2}
+      note="top() reads the top"
+    />
+  ),
+  "stack-python-list": (
+    <StackVisualizer
+      title="Python list as stack"
+      items={[1, 2, 3]}
+      highlightIndex={2}
+      note="append()/pop() at the end"
+    />
+  ),
+  "stack-reverse-string": (
+    <GenericArrayVisualizer
+      inputLabel="Input"
+      inputArray={["s", "t", "a", "c", "k"]}
+      outputLabel="Output"
+      outputArray={["k", "c", "a", "t", "s"]}
+      description="Push then pop"
+    />
+  ),
+  "stack-reverse-array": (
+    <GenericArrayVisualizer
+      inputLabel="Input"
+      inputArray={[1, 2, 3, 4]}
+      outputLabel="Output"
+      outputArray={[4, 3, 2, 1]}
+      description="Stack reversal"
+    />
+  ),
+  "stack-palindrome-check": (
+    <GenericArrayVisualizer
+      inputLabel="Input"
+      inputArray={["l", "e", "v", "e", "l"]}
+      outputVariable="Palindrome = true"
+      description="Compare with stack order"
+    />
+  ),
+  "stack-undo-redo": (
+    <GenericArrayVisualizer
+      inputLabel="Edits"
+      inputArray={["Hello", "Hello World"]}
+      outputVariable="Undo -> Hello"
+      description="Undo stack restores previous state"
+    />
+  ),
+  "stack-browser-history": (
+    <GenericArrayVisualizer
+      inputLabel="History"
+      inputArray={["home", "news", "docs"]}
+      outputVariable="Back -> news"
+      description="Back/forward stacks"
+    />
+  ),
+  "stack-balanced-parentheses": (
+    <GenericArrayVisualizer
+      inputLabel="Input"
+      inputArray={["{", "[", "(", ")", "]", "}"]}
+      outputVariable="Balanced = true"
+      description="Matching brackets in order"
+    />
+  ),
+  "stack-valid-parentheses": (
+    <GenericArrayVisualizer
+      inputLabel="Input"
+      inputArray={["(", "(", ")"]}
+      outputVariable="Valid = false"
+      description="Unmatched opening bracket"
+    />
+  ),
+  "stack-redundant-brackets": (
+    <GenericArrayVisualizer
+      inputLabel="Input"
+      inputArray={["(", "a", "+", "(", "b", ")", ")"]}
+      outputVariable="Redundant = true"
+      description="Inner brackets contain no operator"
+    />
+  ),
+  "stack-min-remove-brackets": (
+    <GenericArrayVisualizer
+      inputLabel="Input"
+      inputArray={["(", "(", ")", ")", ")", "("]}
+      outputVariable="Min removals = 2"
+      description="Extra closing/opening brackets"
+    />
+  ),
+  "stack-longest-valid-parentheses": (
+    <GenericArrayVisualizer
+      inputLabel="Input"
+      inputArray={[")", "(", ")", "(", ")", ")"]}
+      outputVariable="Longest = 4"
+      description="Index stack length"
+    />
+  ),
+  "stack-infix-expression": (
+    <GenericArrayVisualizer
+      inputLabel="Tokens"
+      inputArray={["a", "+", "b", "*", "c"]}
+      outputVariable="Infix"
+      description="Operator between operands"
+    />
+  ),
+  "stack-prefix-expression": (
+    <GenericArrayVisualizer
+      inputLabel="Tokens"
+      inputArray={["+", "a", "*", "b", "c"]}
+      outputVariable="Prefix"
+      description="Operator before operands"
+    />
+  ),
+  "stack-postfix-expression": (
+    <GenericArrayVisualizer
+      inputLabel="Tokens"
+      inputArray={["a", "b", "c", "*", "+"]}
+      outputVariable="Postfix"
+      description="Operator after operands"
+    />
+  ),
+  "stack-infix-to-postfix": (
+    <GenericArrayVisualizer
+      inputLabel="Infix"
+      inputArray={["a", "+", "b", "*", "(", "c", "-", "d", ")"]}
+      outputVariable="abcd-*+"
+      description="Operator stack conversion"
+    />
+  ),
+  "stack-infix-to-prefix": (
+    <GenericArrayVisualizer
+      inputLabel="Infix"
+      inputArray={["(", "a", "+", "b", ")", "*", "c"]}
+      outputVariable="*+abc"
+      description="Reverse, postfix, reverse"
+    />
+  ),
+  "stack-prefix-to-infix": (
+    <GenericArrayVisualizer
+      inputLabel="Prefix"
+      inputArray={["*", "+", "a", "b", "-", "c", "d"]}
+      outputVariable="((a+b)*(c-d))"
+      description="Operands combine on stack"
+    />
+  ),
+  "stack-postfix-to-infix": (
+    <GenericArrayVisualizer
+      inputLabel="Postfix"
+      inputArray={["a", "b", "+", "c", "d", "-", "*"]}
+      outputVariable="((a+b)*(c-d))"
+      description="Operands combine on stack"
+    />
+  ),
+  "stack-evaluate-postfix": (
+    <GenericArrayVisualizer
+      inputLabel="Postfix"
+      inputArray={["2", "3", "4", "*", "+"]}
+      outputVariable="14"
+      description="Stack-based evaluation"
+    />
+  ),
+  "stack-evaluate-prefix": (
+    <GenericArrayVisualizer
+      inputLabel="Prefix"
+      inputArray={["+", "2", "*", "3", "4"]}
+      outputVariable="14"
+      description="Right-to-left evaluation"
+    />
+  ),
+  "stack-next-greater": (
+    <GenericArrayVisualizer
+      inputLabel="Input"
+      inputArray={[4, 5, 2, 25]}
+      outputLabel="Output"
+      outputArray={[5, 25, 25, -1]}
+      description="Next greater to the right"
+    />
+  ),
+  "stack-next-smaller": (
+    <GenericArrayVisualizer
+      inputLabel="Input"
+      inputArray={[4, 5, 2, 10]}
+      outputLabel="Output"
+      outputArray={[2, 2, -1, -1]}
+      description="Next smaller to the right"
+    />
+  ),
+  "stack-prev-greater": (
+    <GenericArrayVisualizer
+      inputLabel="Input"
+      inputArray={[10, 4, 2, 20, 40, 12]}
+      outputLabel="Output"
+      outputArray={[-1, 10, 4, -1, -1, 40]}
+      description="Previous greater to the left"
+    />
+  ),
+  "stack-prev-smaller": (
+    <GenericArrayVisualizer
+      inputLabel="Input"
+      inputArray={[10, 4, 2, 20, 40, 12]}
+      outputLabel="Output"
+      outputArray={[-1, -1, -1, 2, 20, 2]}
+      description="Previous smaller to the left"
+    />
+  ),
+  "stack-circular-next-greater": (
+    <GenericArrayVisualizer
+      inputLabel="Input"
+      inputArray={[1, 2, 1]}
+      outputLabel="Output"
+      outputArray={[2, -1, 2]}
+      description="Circular traversal"
+    />
+  ),
+  "stack-stock-span": (
+    <GenericArrayVisualizer
+      inputLabel="Price"
+      inputArray={[100, 80, 60, 70, 60, 75, 85]}
+      outputLabel="Span"
+      outputArray={[1, 1, 1, 2, 1, 4, 6]}
+      description="Consecutive days span"
+    />
+  ),
+  "stack-largest-rectangle-histogram": (
+    <GenericArrayVisualizer
+      inputLabel="Heights"
+      inputArray={[2, 1, 5, 6, 2, 3]}
+      outputVariable="Max area = 10"
+      description="Widths from stack indices"
+    />
+  ),
+  "stack-trapping-rain-water": (
+    <GenericArrayVisualizer
+      inputLabel="Bars"
+      inputArray={[0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]}
+      outputVariable="Trapped water = 6"
+      description="Stack of indices"
+    />
+  ),
+  "stack-asteroid-collision": (
+    <GenericArrayVisualizer
+      inputLabel="Asteroids"
+      inputArray={[5, 10, -5]}
+      outputLabel="Result"
+      outputArray={[5, 10]}
+      description="Collisions resolved"
+    />
+  ),
+  "stack-remove-k-digits": (
+    <GenericArrayVisualizer
+      inputLabel="Input"
+      inputArray={["1432219", "k=3"]}
+      outputVariable="1219"
+      description="Remove digits with monotonic stack"
+    />
+  ),
+};
+
 const RecursionLevelTreeVisualizer = ({
   title,
   subtitle = "Level-wise call expansion and return flow",
@@ -5467,6 +6019,2542 @@ Node mergeTwoLists(Node l1, Node l2) {
     code: {
       cpp: "#include <iostream>\\n#include <unordered_map>\\nusing namespace std;\\n\\nclass Node {\\npublic:\\n    int data;\\n    Node* next;\\n    Node* prev;\\n    Node(int data) {\\n        this->data = data;\\n        this->next = nullptr;\\n        this->prev = nullptr;\\n    }\\n};\\n\\n// --- Main Logic ---\\nclass LRUCache {\\n    Node* head = new Node(-1);\\n    Node* tail = new Node(-1);\\n    int capacity;\\n    unordered_map<int, Node*> map;\\npublic:\\n    LRUCache(int cap) {\\n        capacity = cap;\\n        head->next = tail;\\n        tail->prev = head;\\n    }\\n    void addNode(Node* newNode) {\\n        Node* temp = head->next;\\n        newNode->next = temp;\\n        newNode->prev = head;\\n        head->next = newNode;\\n        temp->prev = newNode;\\n    }\\n    void deleteNode(Node* delNode) {\\n        Node* prevNode = delNode->prev;\\n        Node* nextNode = delNode->next;\\n        prevNode->next = nextNode;\\n        nextNode->prev = prevNode;\\n    }\\n    int get(int key) {\\n        if (map.find(key) != map.end()) {\\n            Node* resNode = map[key];\\n            int ans = resNode->data;\\n            map.erase(key);\\n            deleteNode(resNode);\\n            addNode(resNode);\\n            map[key] = head->next;\\n            return ans;\\n        }\\n        return -1;\\n    }\\n    void put(int key, int value) {\\n        if (map.find(key) != map.end()) {\\n            Node* existingNode = map[key];\\n            map.erase(key);\\n            deleteNode(existingNode);\\n        }\\n        if (map.size() == capacity) {\\n            map.erase(tail->prev->data);\\n            deleteNode(tail->prev);\\n        }\\n        Node* newNode = new Node(value);\\n        addNode(newNode);\\n        map[key] = head->next;\\n    }\\n};",
       java: "import java.util.*;\\n\\nclass Node {\\n    int data;\\n    Node next;\\n    Node prev;\\n    Node(int data) {\\n        this.data = data;\\n        this.next = null;\\n        this.prev = null;\\n    }\\n}\\n\\n// --- Main Logic ---\\nclass LRUCache {\\n    Node head = new Node(-1);\\n    Node tail = new Node(-1);\\n    int capacity;\\n    HashMap<Integer, Node> map = new HashMap<>();\\n    public LRUCache(int cap) {\\n        capacity = cap;\\n        head.next = tail;\\n        tail.prev = head;\\n    }\\n    private void addNode(Node newNode) {\\n        Node temp = head.next;\\n        newNode.next = temp;\\n        newNode.prev = head;\\n        head.next = newNode;\\n        temp.prev = newNode;\\n    }\\n    private void deleteNode(Node delNode) {\\n        Node prevNode = delNode.prev;\\n        Node nextNode = delNode.next;\\n        prevNode.next = nextNode;\\n        nextNode.prev = prevNode;\\n    }\\n    public int get(int key) {\\n        if (map.containsKey(key)) {\\n            Node resNode = map.get(key);\\n            int ans = resNode.data;\\n            map.remove(key);\\n            deleteNode(resNode);\\n            addNode(resNode);\\n            map.put(key, head.next);\\n            return ans;\\n        }\\n        return -1;\\n    }\\n    public void put(int key, int value) {\\n        if (map.containsKey(key)) {\\n            Node existingNode = map.get(key);\\n            map.remove(key);\\n            deleteNode(existingNode);\\n        }\\n        if (map.size() == capacity) {\\n            map.remove(tail.prev.data);\\n            deleteNode(tail.prev);\\n        }\\n        Node newNode = new Node(value);\\n        addNode(newNode);\\n        map.put(key, head.next);\\n    }\\n}",
+    },
+  },
+  "stack-definition": {
+    title: "What is a Stack",
+    explanation:
+      "A stack is a linear data structure where insertion and deletion happen only at the top. Think of it like a stack of plates: the last plate placed is the first one removed.",
+    visual: (
+      <StackVisualizer
+        title="Stack (Bottom to Top)"
+        items={[10, 20, 30]}
+        highlightIndex={2}
+        details={[
+          "Top element: 30",
+          "Push and pop happen only at the top.",
+        ]}
+      />
+    ),
+    code: {
+      cpp: `#include <iostream>
+#include <stack>
+using namespace std;
+
+int main() {
+    stack<int> st;
+    st.push(10);
+    st.push(20);
+    st.push(30);
+    cout << "Top: " << st.top() << endl; // Output: Top: 30
+    st.pop();
+    cout << "Top after pop: " << st.top() << endl; // Output: Top after pop: 20
+    return 0;
+}`,
+      java: `import java.util.Stack;
+
+public class Main {
+    public static void main(String[] args) {
+        Stack<Integer> st = new Stack<>();
+        st.push(10);
+        st.push(20);
+        st.push(30);
+        System.out.println("Top: " + st.peek()); // Output: Top: 30
+        st.pop();
+        System.out.println("Top after pop: " + st.peek()); // Output: Top after pop: 20
+    }
+}`,
+    },
+  },
+  "stack-lifo": {
+    title: "LIFO (Last In First Out) concept",
+    explanation:
+      "LIFO means the element pushed last is the first to be popped. All stack operations happen around the top.",
+    visual: (
+      <StackVisualizer
+        title="LIFO order"
+        items={[1, 2, 3]}
+        highlightIndex={2}
+        note="Last in, first out."
+        details={["Push order: 1 -> 2 -> 3", "Pop order: 3 -> 2 -> 1"]}
+      />
+    ),
+    code: {
+      cpp: `#include <iostream>
+#include <stack>
+using namespace std;
+
+int main() {
+    stack<int> st;
+    st.push(1);
+    st.push(2);
+    st.push(3);
+
+    while (!st.empty()) {
+        cout << st.top() << " "; // Output: 3 2 1
+        st.pop();
+    }
+    return 0;
+}`,
+      java: `import java.util.Stack;
+
+public class Main {
+    public static void main(String[] args) {
+        Stack<Integer> st = new Stack<>();
+        st.push(1);
+        st.push(2);
+        st.push(3);
+
+        while (!st.isEmpty()) {
+            System.out.print(st.peek() + " "); // Output: 3 2 1
+            st.pop();
+        }
+    }
+}`,
+    },
+  },
+  "stack-memory-representation": {
+    title: "Stack memory representation",
+    explanation:
+      "In an array-based stack, elements are stored in contiguous memory and tracked with a top index. In a linked-list stack, nodes live in separate memory locations and the head is treated as the top.",
+    visual: (
+      <StackMemoryVisual />
+    ),
+    code: {
+      cpp: `#include <iostream>
+using namespace std;
+
+class ArrayStack {
+    int arr[5];
+    int topIndex;
+public:
+    ArrayStack() : topIndex(-1) {}
+
+    void push(int value) {
+        if (topIndex == 4) {
+            cout << "Overflow" << endl; // Output: Overflow (when full)
+            return;
+        }
+        arr[++topIndex] = value;
+    }
+
+    void printMemory() {
+        for (int i = 0; i <= topIndex; i++) {
+            cout << "Index " << i << " = " << arr[i] << endl; // Output: Index 0 = 10, Index 1 = 20, Index 2 = 30
+        }
+        cout << "Top index = " << topIndex << endl; // Output: Top index = 2
+    }
+};
+
+int main() {
+    ArrayStack st;
+    st.push(10);
+    st.push(20);
+    st.push(30);
+    st.printMemory();
+    return 0;
+}`,
+      java: `public class Main {
+    static class ArrayStack {
+        int[] arr = new int[5];
+        int topIndex = -1;
+
+        void push(int value) {
+            if (topIndex == 4) {
+                System.out.println("Overflow"); // Output: Overflow (when full)
+                return;
+            }
+            arr[++topIndex] = value;
+        }
+
+        void printMemory() {
+            for (int i = 0; i <= topIndex; i++) {
+                System.out.println("Index " + i + " = " + arr[i]); // Output: Index 0 = 10, Index 1 = 20, Index 2 = 30
+            }
+            System.out.println("Top index = " + topIndex); // Output: Top index = 2
+        }
+    }
+
+    public static void main(String[] args) {
+        ArrayStack st = new ArrayStack();
+        st.push(10);
+        st.push(20);
+        st.push(30);
+        st.printMemory();
+    }
+}`,
+    },
+  },
+  "stack-operations-overview": {
+    title: "Stack operations",
+    explanation:
+      "Common stack operations include push (add), pop (remove), peek/top (read), isEmpty, and isFull. In an array-based stack, overflow and underflow checks are required.",
+    visual: stackVisuals["stack-operations-overview"],
+    code: {
+      cpp: `#include <iostream>
+#include <climits>
+using namespace std;
+
+class ArrayStack {
+    int* arr;
+    int capacity;
+    int topIndex;
+public:
+    ArrayStack(int size) {
+        capacity = size;
+        arr = new int[capacity];
+        topIndex = -1;
+    }
+
+    ~ArrayStack() {
+        delete[] arr;
+    }
+
+    bool isEmpty() { return topIndex == -1; }
+    bool isFull() { return topIndex == capacity - 1; }
+
+    void push(int value) {
+        if (isFull()) {
+            cout << "Overflow" << endl; // Output: Overflow (when full)
+            return;
+        }
+        arr[++topIndex] = value;
+    }
+
+    int pop() {
+        if (isEmpty()) {
+            cout << "Underflow" << endl; // Output: Underflow (when empty)
+            return INT_MIN;
+        }
+        return arr[topIndex--];
+    }
+
+    int peek() {
+        if (isEmpty()) {
+            cout << "Empty" << endl; // Output: Empty (when empty)
+            return INT_MIN;
+        }
+        return arr[topIndex];
+    }
+
+    int size() { return topIndex + 1; }
+};
+
+int main() {
+    ArrayStack st(3);
+    st.push(10);
+    st.push(20);
+    cout << "Top: " << st.peek() << endl; // Output: Top: 20
+    cout << "Pop: " << st.pop() << endl; // Output: Pop: 20
+    cout << "Size: " << st.size() << endl; // Output: Size: 1
+    return 0;
+}`,
+      java: `public class Main {
+    static class ArrayStack {
+        int[] arr;
+        int capacity;
+        int topIndex;
+
+        ArrayStack(int size) {
+            capacity = size;
+            arr = new int[capacity];
+            topIndex = -1;
+        }
+
+        boolean isEmpty() { return topIndex == -1; }
+        boolean isFull() { return topIndex == capacity - 1; }
+
+        void push(int value) {
+            if (isFull()) {
+                System.out.println("Overflow"); // Output: Overflow (when full)
+                return;
+            }
+            arr[++topIndex] = value;
+        }
+
+        int pop() {
+            if (isEmpty()) {
+                System.out.println("Underflow"); // Output: Underflow (when empty)
+                return Integer.MIN_VALUE;
+            }
+            return arr[topIndex--];
+        }
+
+        int peek() {
+            if (isEmpty()) {
+                System.out.println("Empty"); // Output: Empty (when empty)
+                return Integer.MIN_VALUE;
+            }
+            return arr[topIndex];
+        }
+
+        int size() { return topIndex + 1; }
+    }
+
+    public static void main(String[] args) {
+        ArrayStack st = new ArrayStack(3);
+        st.push(10);
+        st.push(20);
+        System.out.println("Top: " + st.peek()); // Output: Top: 20
+        System.out.println("Pop: " + st.pop()); // Output: Pop: 20
+        System.out.println("Size: " + st.size()); // Output: Size: 1
+    }
+}`,
+    },
+  },
+  "stack-push": {
+    title: "push()",
+    explanation:
+      "The push() operation moves the top forward by one position and stores the new element. If the stack is full, an overflow occurs.",
+    visual: stackVisuals["stack-push"],
+    code: {
+      cpp: `#include <iostream>
+using namespace std;
+
+class ArrayStack {
+    int arr[3];
+    int topIndex;
+public:
+    ArrayStack() : topIndex(-1) {}
+    bool isFull() { return topIndex == 2; }
+    void push(int value) {
+        if (isFull()) {
+            cout << "Overflow" << endl; // Output: Overflow
+            return;
+        }
+        arr[++topIndex] = value;
+    }
+};
+
+int main() {
+    ArrayStack st;
+    st.push(5);
+    st.push(10);
+    st.push(15);
+    st.push(20);
+    return 0;
+}`,
+      java: `public class Main {
+    static class ArrayStack {
+        int[] arr = new int[3];
+        int topIndex = -1;
+        boolean isFull() { return topIndex == 2; }
+        void push(int value) {
+            if (isFull()) {
+                System.out.println("Overflow"); // Output: Overflow
+                return;
+            }
+            arr[++topIndex] = value;
+        }
+    }
+
+    public static void main(String[] args) {
+        ArrayStack st = new ArrayStack();
+        st.push(5);
+        st.push(10);
+        st.push(15);
+        st.push(20);
+    }
+}`,
+    },
+  },
+  "stack-pop": {
+    title: "pop()",
+    explanation:
+      "The pop() operation removes and returns the top element. If the stack is empty, an underflow occurs.",
+    visual: stackVisuals["stack-pop"],
+    code: {
+      cpp: `#include <iostream>
+#include <climits>
+using namespace std;
+
+class ArrayStack {
+    int arr[3];
+    int topIndex;
+public:
+    ArrayStack() : topIndex(-1) {}
+    bool isEmpty() { return topIndex == -1; }
+    void push(int value) { arr[++topIndex] = value; }
+    int pop() {
+        if (isEmpty()) {
+            cout << "Underflow" << endl; // Output: Underflow (when empty)
+            return INT_MIN;
+        }
+        return arr[topIndex--];
+    }
+};
+
+int main() {
+    ArrayStack st;
+    st.push(7);
+    st.push(9);
+    cout << st.pop() << endl; // Output: 9
+    cout << st.pop() << endl; // Output: 7
+    cout << st.pop() << endl; // Output: -2147483648
+    return 0;
+}`,
+      java: `public class Main {
+    static class ArrayStack {
+        int[] arr = new int[3];
+        int topIndex = -1;
+        boolean isEmpty() { return topIndex == -1; }
+        void push(int value) { arr[++topIndex] = value; }
+        int pop() {
+            if (isEmpty()) {
+                System.out.println("Underflow"); // Output: Underflow (when empty)
+                return Integer.MIN_VALUE;
+            }
+            return arr[topIndex--];
+        }
+    }
+
+    public static void main(String[] args) {
+        ArrayStack st = new ArrayStack();
+        st.push(7);
+        st.push(9);
+        System.out.println(st.pop()); // Output: 9
+        System.out.println(st.pop()); // Output: 7
+        System.out.println(st.pop()); // Output: -2147483648
+    }
+}`,
+    },
+  },
+  "stack-peek": {
+    title: "peek() / top()",
+    explanation:
+      "The peek() or top() operation returns the top element without removing it.",
+    visual: stackVisuals["stack-peek"],
+    code: {
+      cpp: `#include <iostream>
+#include <climits>
+using namespace std;
+
+class ArrayStack {
+    int arr[3];
+    int topIndex;
+public:
+    ArrayStack() : topIndex(-1) {}
+    void push(int value) { arr[++topIndex] = value; }
+    int peek() {
+        if (topIndex == -1) return INT_MIN;
+        return arr[topIndex];
+    }
+};
+
+int main() {
+    ArrayStack st;
+    st.push(4);
+    st.push(8);
+    cout << "Top: " << st.peek() << endl; // Output: Top: 8
+    return 0;
+}`,
+      java: `public class Main {
+    static class ArrayStack {
+        int[] arr = new int[3];
+        int topIndex = -1;
+        void push(int value) { arr[++topIndex] = value; }
+        int peek() {
+            if (topIndex == -1) return Integer.MIN_VALUE;
+            return arr[topIndex];
+        }
+    }
+
+    public static void main(String[] args) {
+        ArrayStack st = new ArrayStack();
+        st.push(4);
+        st.push(8);
+        System.out.println("Top: " + st.peek()); // Output: Top: 8
+    }
+}`,
+    },
+  },
+  "stack-is-empty": {
+    title: "isEmpty()",
+    explanation:
+      "isEmpty() checks whether the stack has any elements. In an array stack, topIndex == -1; in a linked-list stack, head == null.",
+    visual: stackVisuals["stack-is-empty"],
+  },
+  "stack-is-full": {
+    title: "isFull()",
+    explanation:
+      "isFull() is only meaningful for a fixed-size array stack. When topIndex == capacity - 1, the stack is full.",
+    visual: stackVisuals["stack-is-full"],
+  },
+  "stack-overflow": {
+    title: "Stack overflow",
+    explanation:
+      "Pushing onto a full stack causes overflow. In an array stack, this must be handled explicitly.",
+    visual: stackVisuals["stack-overflow"],
+  },
+  "stack-underflow": {
+    title: "Stack underflow",
+    explanation:
+      "Popping or peeking from an empty stack causes underflow. In this case, you return an error or a sentinel value.",
+    visual: stackVisuals["stack-underflow"],
+  },
+  "stack-time-complexity": {
+    title: "Time complexity of stack operations",
+    explanation:
+      "push, pop, peek, isEmpty, and isFull are all O(1). Traversing or searching a stack is O(n). Space complexity is O(n).",
+    visual: stackVisuals["stack-time-complexity"],
+  },
+  "stack-array-implementation": {
+    title: "Array-based Stack",
+    explanation:
+      "An array-based stack uses a fixed-size array and a top index. The top moves with each push and pop.",
+    visual: stackVisuals["stack-array-implementation"],
+    code: {
+      cpp: `#include <iostream>
+#include <climits>
+using namespace std;
+
+class ArrayStack {
+    int* arr;
+    int capacity;
+    int topIndex;
+public:
+    ArrayStack(int size) {
+        capacity = size;
+        arr = new int[capacity];
+        topIndex = -1;
+    }
+
+    ~ArrayStack() { delete[] arr; }
+
+    void push(int value) {
+        if (topIndex == capacity - 1) {
+            cout << "Overflow" << endl; // Output: Overflow (when full)
+            return;
+        }
+        arr[++topIndex] = value;
+    }
+
+    int pop() {
+        if (topIndex == -1) {
+            cout << "Underflow" << endl; // Output: Underflow (when empty)
+            return INT_MIN;
+        }
+        return arr[topIndex--];
+    }
+
+    int peek() {
+        if (topIndex == -1) return INT_MIN;
+        return arr[topIndex];
+    }
+};
+
+int main() {
+    ArrayStack st(4);
+    st.push(3);
+    st.push(6);
+    cout << st.peek() << endl; // Output: 6
+    cout << st.pop() << endl; // Output: 6
+    return 0;
+}`,
+      java: `public class Main {
+    static class ArrayStack {
+        int[] arr;
+        int capacity;
+        int topIndex;
+
+        ArrayStack(int size) {
+            capacity = size;
+            arr = new int[capacity];
+            topIndex = -1;
+        }
+
+        void push(int value) {
+            if (topIndex == capacity - 1) {
+                System.out.println("Overflow"); // Output: Overflow (when full)
+                return;
+            }
+            arr[++topIndex] = value;
+        }
+
+        int pop() {
+            if (topIndex == -1) {
+                System.out.println("Underflow"); // Output: Underflow (when empty)
+                return Integer.MIN_VALUE;
+            }
+            return arr[topIndex--];
+        }
+
+        int peek() {
+            if (topIndex == -1) return Integer.MIN_VALUE;
+            return arr[topIndex];
+        }
+    }
+
+    public static void main(String[] args) {
+        ArrayStack st = new ArrayStack(4);
+        st.push(3);
+        st.push(6);
+        System.out.println(st.peek()); // Output: 6
+        System.out.println(st.pop()); // Output: 6
+    }
+}`,
+    },
+  },
+  "stack-static": {
+    title: "Static stack",
+    explanation:
+      "A static stack has a fixed size. Memory is allocated once, and pushes beyond capacity are not allowed.",
+    visual: stackVisuals["stack-static"],
+    code: {
+      cpp: `#include <iostream>
+using namespace std;
+
+class StaticStack {
+    int arr[3];
+    int topIndex;
+public:
+    StaticStack() : topIndex(-1) {}
+    void push(int value) {
+        if (topIndex == 2) {
+            cout << "Overflow" << endl; // Output: Overflow
+            return;
+        }
+        arr[++topIndex] = value;
+    }
+    int top() { return arr[topIndex]; }
+};
+
+int main() {
+    StaticStack st;
+    st.push(1);
+    st.push(2);
+    st.push(3);
+    st.push(4);
+    cout << st.top() << endl; // Output: 3
+    return 0;
+}`,
+      java: `public class Main {
+    static class StaticStack {
+        int[] arr = new int[3];
+        int topIndex = -1;
+        void push(int value) {
+            if (topIndex == 2) {
+                System.out.println("Overflow"); // Output: Overflow
+                return;
+            }
+            arr[++topIndex] = value;
+        }
+        int top() { return arr[topIndex]; }
+    }
+
+    public static void main(String[] args) {
+        StaticStack st = new StaticStack();
+        st.push(1);
+        st.push(2);
+        st.push(3);
+        st.push(4);
+        System.out.println(st.top()); // Output: 3
+    }
+}`,
+    },
+  },
+  "stack-overflow-handling": {
+    title: "Overflow handling",
+    explanation:
+      "To handle overflow, check isFull() before pushing and return an error or flag.",
+    visual: stackVisuals["stack-overflow-handling"],
+    code: {
+      cpp: `#include <iostream>
+using namespace std;
+
+class ArrayStack {
+    int arr[2];
+    int topIndex;
+public:
+    ArrayStack() : topIndex(-1) {}
+    bool isFull() { return topIndex == 1; }
+    bool push(int value) {
+        if (isFull()) return false;
+        arr[++topIndex] = value;
+        return true;
+    }
+};
+
+int main() {
+    ArrayStack st;
+    cout << st.push(5) << endl; // Output: 1
+    cout << st.push(9) << endl; // Output: 1
+    cout << st.push(11) << endl; // Output: 0
+    return 0;
+}`,
+      java: `public class Main {
+    static class ArrayStack {
+        int[] arr = new int[2];
+        int topIndex = -1;
+        boolean isFull() { return topIndex == 1; }
+        boolean push(int value) {
+            if (isFull()) return false;
+            arr[++topIndex] = value;
+            return true;
+        }
+    }
+
+    public static void main(String[] args) {
+        ArrayStack st = new ArrayStack();
+        System.out.println(st.push(5)); // Output: true
+        System.out.println(st.push(9)); // Output: true
+        System.out.println(st.push(11)); // Output: false
+    }
+}`,
+    },
+  },
+  "stack-linkedlist-implementation": {
+    title: "Linked-list Stack",
+    explanation:
+      "In a linked-list stack, the head is treated as the top. push inserts at the head, and pop removes from the head.",
+    visual: stackVisuals["stack-linkedlist-implementation"],
+    code: {
+      cpp: `#include <iostream>
+using namespace std;
+
+class Node {
+public:
+    int data;
+    Node* next;
+    Node(int value) : data(value), next(nullptr) {}
+};
+
+class LinkedStack {
+    Node* head;
+public:
+    LinkedStack() : head(nullptr) {}
+
+    bool isEmpty() { return head == nullptr; }
+
+    void push(int value) {
+        Node* node = new Node(value);
+        node->next = head;
+        head = node;
+    }
+
+    int pop() {
+        if (isEmpty()) return -1;
+        Node* temp = head;
+        int value = temp->data;
+        head = head->next;
+        delete temp;
+        return value;
+    }
+
+    int peek() { return isEmpty() ? -1 : head->data; }
+};
+
+int main() {
+    LinkedStack st;
+    st.push(10);
+    st.push(20);
+    cout << st.peek() << endl; // Output: 20
+    cout << st.pop() << endl; // Output: 20
+    return 0;
+}`,
+      java: `public class Main {
+    static class Node {
+        int data;
+        Node next;
+        Node(int value) { data = value; }
+    }
+
+    static class LinkedStack {
+        Node head;
+        boolean isEmpty() { return head == null; }
+        void push(int value) {
+            Node node = new Node(value);
+            node.next = head;
+            head = node;
+        }
+        int pop() {
+            if (isEmpty()) return -1;
+            int value = head.data;
+            head = head.next;
+            return value;
+        }
+        int peek() { return isEmpty() ? -1 : head.data; }
+    }
+
+    public static void main(String[] args) {
+        LinkedStack st = new LinkedStack();
+        st.push(10);
+        st.push(20);
+        System.out.println(st.peek()); // Output: 20
+        System.out.println(st.pop()); // Output: 20
+    }
+}`,
+    },
+  },
+  "stack-dynamic": {
+    title: "Dynamic stack",
+    explanation:
+      "A dynamic stack does not have a fixed size. With a linked-list implementation, it grows and shrinks based on available memory.",
+    visual: stackVisuals["stack-dynamic"],
+  },
+  "stack-memory-allocation": {
+    title: "Memory allocation",
+    explanation:
+      "In C++, nodes use new/delete. In Java, the garbage collector cleans up unused nodes after allocation.",
+    visual: stackVisuals["stack-memory-allocation"],
+    code: {
+      cpp: `#include <iostream>
+using namespace std;
+
+class Node {
+public:
+    int data;
+    Node* next;
+    Node(int value) : data(value), next(nullptr) {}
+};
+
+int main() {
+    Node* node = new Node(42);
+    cout << node->data << endl; // Output: 42
+    delete node;
+    return 0;
+}`,
+      java: `public class Main {
+    static class Node {
+        int data;
+        Node next;
+        Node(int value) { data = value; }
+    }
+
+    public static void main(String[] args) {
+        Node node = new Node(42);
+        System.out.println(node.data); // Output: 42
+    }
+}`,
+    },
+  },
+  "stack-built-in": {
+    title: "Built-in Stack",
+    explanation:
+      "Most languages provide built-in stack containers with push/pop/peek operations. These implementations hide internal memory management.",
+    visual: stackVisuals["stack-built-in"],
+  },
+  "stack-java-class": {
+    title: "Java Stack class",
+    explanation:
+      "Java's Stack class provides LIFO behavior with push/pop/peek methods.",
+    visual: stackVisuals["stack-java-class"],
+    code: {
+      cpp: `// C++ equivalent using the STL stack.
+#include <iostream>
+#include <stack>
+using namespace std;
+
+int main() {
+    stack<int> st;
+    st.push(5);
+    st.push(9);
+    cout << st.top() << endl; // Output: 9
+    return 0;
+}`,
+      java: `import java.util.Stack;
+
+public class Main {
+    public static void main(String[] args) {
+        Stack<Integer> st = new Stack<>();
+        st.push(5);
+        st.push(9);
+        System.out.println(st.peek()); // Output: 9
+        st.pop();
+        System.out.println(st.peek()); // Output: 5
+    }
+}`,
+    },
+  },
+  "stack-cpp-stl": {
+    title: "C++ STL stack",
+    explanation:
+      "The C++ STL stack adapter provides LIFO operations. The default underlying container is deque.",
+    visual: stackVisuals["stack-cpp-stl"],
+    code: {
+      cpp: `#include <iostream>
+#include <stack>
+using namespace std;
+
+int main() {
+    stack<int> st;
+    st.push(1);
+    st.push(2);
+    st.push(3);
+    cout << st.top() << endl; // Output: 3
+    st.pop();
+    cout << st.top() << endl; // Output: 2
+    return 0;
+}`,
+      java: `// Java equivalent using the Stack class.
+import java.util.Stack;
+
+public class Main {
+    public static void main(String[] args) {
+        Stack<Integer> st = new Stack<>();
+        st.push(1);
+        st.push(2);
+        st.push(3);
+        System.out.println(st.peek()); // Output: 3
+        st.pop();
+        System.out.println(st.peek()); // Output: 2
+    }
+}`,
+    },
+  },
+  "stack-python-list": {
+    title: "Python stack (list)",
+    explanation:
+      "In Python, a list can be used as a stack: append() for push and pop() to remove from the top. Example: stack.append(x), stack.pop().",
+    visual: stackVisuals["stack-python-list"],
+  },
+  "stack-reverse-string": {
+    title: "Reverse string using stack",
+    explanation:
+      "Pushing string characters onto a stack and popping them yields the reverse order.",
+    visual: stackVisuals["stack-reverse-string"],
+    code: {
+      cpp: `#include <iostream>
+#include <stack>
+#include <string>
+#include <cctype>
+using namespace std;
+
+string reverseString(const string& s) {
+    stack<char> st;
+    for (char c : s) st.push(c);
+    string out;
+    out.reserve(s.size());
+    while (!st.empty()) {
+        out.push_back(st.top());
+        st.pop();
+    }
+    return out;
+}
+
+int main() {
+    string s = "stack";
+    cout << reverseString(s) << endl; // Output: kcats
+    return 0;
+}`,
+      java: `import java.util.Stack;
+
+public class Main {
+    static String reverseString(String s) {
+        Stack<Character> st = new Stack<>();
+        for (char c : s.toCharArray()) st.push(c);
+        StringBuilder sb = new StringBuilder();
+        while (!st.isEmpty()) sb.append(st.pop());
+        return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        String s = "stack";
+        System.out.println(reverseString(s)); // Output: kcats
+    }
+}`,
+    },
+  },
+  "stack-reverse-array": {
+    title: "Reverse array using stack",
+    explanation:
+      "Pushing array elements onto a stack and popping them produces the reversed array.",
+    visual: stackVisuals["stack-reverse-array"],
+    code: {
+      cpp: `#include <iostream>
+#include <vector>
+#include <stack>
+using namespace std;
+
+vector<int> reverseArray(vector<int> arr) {
+    stack<int> st;
+    for (int x : arr) st.push(x);
+    for (size_t i = 0; i < arr.size(); i++) {
+        arr[i] = st.top();
+        st.pop();
+    }
+    return arr;
+}
+
+int main() {
+    vector<int> arr = {1, 2, 3, 4};
+    vector<int> out = reverseArray(arr);
+    for (int x : out) cout << x << " "; // Output: 4 3 2 1
+    return 0;
+}`,
+      java: `import java.util.Stack;
+
+public class Main {
+    static int[] reverseArray(int[] arr) {
+        Stack<Integer> st = new Stack<>();
+        for (int x : arr) st.push(x);
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = st.pop();
+        }
+        return arr;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 4};
+        int[] out = reverseArray(arr);
+        for (int x : out) System.out.print(x + " "); // Output: 4 3 2 1
+    }
+}`,
+    },
+  },
+  "stack-palindrome-check": {
+    title: "Checking palindrome using stack",
+    explanation:
+      "Push the string onto a stack and compare against the original order. If all characters match, it is a palindrome.",
+    visual: stackVisuals["stack-palindrome-check"],
+    code: {
+      cpp: `#include <iostream>
+#include <stack>
+#include <string>
+#include <algorithm>
+#include <cctype>
+using namespace std;
+
+bool isPalindrome(const string& s) {
+    stack<char> st;
+    for (char c : s) st.push(c);
+    for (char c : s) {
+        if (st.top() != c) return false;
+        st.pop();
+    }
+    return true;
+}
+
+int main() {
+    cout << isPalindrome("level") << endl; // Output: 1
+    cout << isPalindrome("stack") << endl; // Output: 0
+    return 0;
+}`,
+      java: `import java.util.Stack;
+
+public class Main {
+    static boolean isPalindrome(String s) {
+        Stack<Character> st = new Stack<>();
+        for (char c : s.toCharArray()) st.push(c);
+        for (char c : s.toCharArray()) {
+            if (st.pop() != c) return false;
+        }
+        return true;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(isPalindrome("level")); // Output: true
+        System.out.println(isPalindrome("stack")); // Output: false
+    }
+}`,
+    },
+  },
+  "stack-undo-redo": {
+    title: "Undo / Redo functionality",
+    explanation:
+      "Undo/Redo is implemented with two stacks: undoStack and redoStack. After every action, the redo stack is cleared.",
+    visual: stackVisuals["stack-undo-redo"],
+    code: {
+      cpp: `#include <iostream>
+#include <stack>
+#include <string>
+#include <cctype>
+using namespace std;
+
+class TextEditor {
+    string text;
+    stack<string> undoStack;
+    stack<string> redoStack;
+public:
+    void type(const string& newText) {
+        undoStack.push(text);
+        text = newText;
+        while (!redoStack.empty()) redoStack.pop();
+    }
+
+    void undo() {
+        if (undoStack.empty()) return;
+        redoStack.push(text);
+        text = undoStack.top();
+        undoStack.pop();
+    }
+
+    void redo() {
+        if (redoStack.empty()) return;
+        undoStack.push(text);
+        text = redoStack.top();
+        redoStack.pop();
+    }
+
+    string getText() { return text; }
+};
+
+int main() {
+    TextEditor editor;
+    editor.type("Hello");
+    editor.type("Hello World");
+    editor.undo();
+    cout << editor.getText() << endl; // Output: Hello
+    editor.redo();
+    cout << editor.getText() << endl; // Output: Hello World
+    return 0;
+}`,
+      java: `import java.util.Stack;
+
+public class Main {
+    static class TextEditor {
+        String text = "";
+        Stack<String> undoStack = new Stack<>();
+        Stack<String> redoStack = new Stack<>();
+
+        void type(String newText) {
+            undoStack.push(text);
+            text = newText;
+            redoStack.clear();
+        }
+
+        void undo() {
+            if (undoStack.isEmpty()) return;
+            redoStack.push(text);
+            text = undoStack.pop();
+        }
+
+        void redo() {
+            if (redoStack.isEmpty()) return;
+            undoStack.push(text);
+            text = redoStack.pop();
+        }
+    }
+
+    public static void main(String[] args) {
+        TextEditor editor = new TextEditor();
+        editor.type("Hello");
+        editor.type("Hello World");
+        editor.undo();
+        System.out.println(editor.text); // Output: Hello
+        editor.redo();
+        System.out.println(editor.text); // Output: Hello World
+    }
+}`,
+    },
+  },
+  "stack-browser-history": {
+    title: "Browser history navigation",
+    explanation:
+      "Browser history is managed with backStack and forwardStack. Visiting a new page clears the forward stack.",
+    visual: stackVisuals["stack-browser-history"],
+    code: {
+      cpp: `#include <iostream>
+#include <stack>
+#include <string>
+#include <cctype>
+using namespace std;
+
+class BrowserHistory {
+    string current;
+    stack<string> backStack;
+    stack<string> forwardStack;
+public:
+    BrowserHistory(const string& homepage) : current(homepage) {}
+
+    void visit(const string& url) {
+        backStack.push(current);
+        current = url;
+        while (!forwardStack.empty()) forwardStack.pop();
+    }
+
+    string back() {
+        if (backStack.empty()) return current;
+        forwardStack.push(current);
+        current = backStack.top();
+        backStack.pop();
+        return current;
+    }
+
+    string forward() {
+        if (forwardStack.empty()) return current;
+        backStack.push(current);
+        current = forwardStack.top();
+        forwardStack.pop();
+        return current;
+    }
+
+    string getCurrent() { return current; }
+};
+
+int main() {
+    BrowserHistory browser("home");
+    browser.visit("news");
+    browser.visit("docs");
+    cout << browser.back() << endl; // Output: news
+    cout << browser.forward() << endl; // Output: docs
+    return 0;
+}`,
+      java: `import java.util.Stack;
+
+public class Main {
+    static class BrowserHistory {
+        String current;
+        Stack<String> backStack = new Stack<>();
+        Stack<String> forwardStack = new Stack<>();
+
+        BrowserHistory(String homepage) { current = homepage; }
+
+        void visit(String url) {
+            backStack.push(current);
+            current = url;
+            forwardStack.clear();
+        }
+
+        String back() {
+            if (backStack.isEmpty()) return current;
+            forwardStack.push(current);
+            current = backStack.pop();
+            return current;
+        }
+
+        String forward() {
+            if (forwardStack.isEmpty()) return current;
+            backStack.push(current);
+            current = forwardStack.pop();
+            return current;
+        }
+    }
+
+    public static void main(String[] args) {
+        BrowserHistory browser = new BrowserHistory("home");
+        browser.visit("news");
+        browser.visit("docs");
+        System.out.println(browser.back()); // Output: news
+        System.out.println(browser.forward()); // Output: docs
+    }
+}`,
+    },
+  },
+  "stack-balanced-parentheses": {
+    title: "Balanced parentheses",
+    explanation:
+      "Balanced parentheses means every opening bracket has a matching closing bracket in the correct order.",
+    visual: stackVisuals["stack-balanced-parentheses"],
+    code: {
+      cpp: `#include <iostream>
+#include <stack>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+bool isBalanced(const string& s) {
+    stack<char> st;
+    for (char c : s) {
+        if (c == '(' || c == '[' || c == '{') {
+            st.push(c);
+        } else if (c == ')' || c == ']' || c == '}') {
+            if (st.empty()) return false;
+            char top = st.top();
+            st.pop();
+            if ((c == ')' && top != '(') ||
+                (c == ']' && top != '[') ||
+                (c == '}' && top != '{')) return false;
+        }
+    }
+    return st.empty();
+}
+
+int main() {
+    cout << isBalanced("{[()]}") << endl; // Output: 1
+    cout << isBalanced("{[(])}") << endl; // Output: 0
+    return 0;
+}`,
+      java: `import java.util.Stack;
+
+public class Main {
+    static boolean isBalanced(String s) {
+        Stack<Character> st = new Stack<>();
+        for (char c : s.toCharArray()) {
+            if (c == '(' || c == '[' || c == '{') {
+                st.push(c);
+            } else if (c == ')' || c == ']' || c == '}') {
+                if (st.isEmpty()) return false;
+                char top = st.pop();
+                if ((c == ')' && top != '(') ||
+                    (c == ']' && top != '[') ||
+                    (c == '}' && top != '{')) return false;
+            }
+        }
+        return st.isEmpty();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(isBalanced("{[()]}")); // Output: true
+        System.out.println(isBalanced("{[(])}")); // Output: false
+    }
+}`,
+    },
+  },
+  "stack-valid-parentheses": {
+    title: "Valid parentheses",
+    explanation:
+      "In the valid parentheses problem, typically only round brackets '(' ')' are used. A stack tracks the open brackets.",
+    visual: stackVisuals["stack-valid-parentheses"],
+    code: {
+      cpp: `#include <iostream>
+#include <stack>
+#include <string>
+using namespace std;
+
+bool isValid(const string& s) {
+    stack<char> st;
+    for (char c : s) {
+        if (c == '(') st.push(c);
+        else if (c == ')') {
+            if (st.empty()) return false;
+            st.pop();
+        }
+    }
+    return st.empty();
+}
+
+int main() {
+    cout << isValid("()()") << endl; // Output: 1
+    cout << isValid("(()") << endl; // Output: 0
+    return 0;
+}`,
+      java: `import java.util.Stack;
+
+public class Main {
+    static boolean isValid(String s) {
+        Stack<Character> st = new Stack<>();
+        for (char c : s.toCharArray()) {
+            if (c == '(') st.push(c);
+            else if (c == ')') {
+                if (st.isEmpty()) return false;
+                st.pop();
+            }
+        }
+        return st.isEmpty();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(isValid("()()")); // Output: true
+        System.out.println(isValid("(()")); // Output: false
+    }
+}`,
+    },
+  },
+  "stack-redundant-brackets": {
+    title: "Redundant brackets",
+    explanation:
+      "Redundant brackets are those that contain no operator, such as ((a+b)) or (a). They can be detected with a stack.",
+    visual: stackVisuals["stack-redundant-brackets"],
+    code: {
+      cpp: `#include <iostream>
+#include <stack>
+#include <string>
+using namespace std;
+
+bool hasRedundant(const string& s) {
+    stack<char> st;
+    for (char c : s) {
+        if (c == ')') {
+            bool hasOperator = false;
+            while (!st.empty() && st.top() != '(') {
+                char t = st.top();
+                st.pop();
+                if (t == '+' || t == '-' || t == '*' || t == '/') {
+                    hasOperator = true;
+                }
+            }
+            if (!st.empty()) st.pop();
+            if (!hasOperator) return true;
+        } else {
+            st.push(c);
+        }
+    }
+    return false;
+}
+
+int main() {
+    cout << hasRedundant("(a+(b))") << endl; // Output: 1
+    cout << hasRedundant("(a+b)") << endl; // Output: 0
+    return 0;
+}`,
+      java: `import java.util.Stack;
+
+public class Main {
+    static boolean hasRedundant(String s) {
+        Stack<Character> st = new Stack<>();
+        for (char c : s.toCharArray()) {
+            if (c == ')') {
+                boolean hasOperator = false;
+                while (!st.isEmpty() && st.peek() != '(') {
+                    char t = st.pop();
+                    if (t == '+' || t == '-' || t == '*' || t == '/') {
+                        hasOperator = true;
+                    }
+                }
+                if (!st.isEmpty()) st.pop();
+                if (!hasOperator) return true;
+            } else {
+                st.push(c);
+            }
+        }
+        return false;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(hasRedundant("(a+(b))")); // Output: true
+        System.out.println(hasRedundant("(a+b)")); // Output: false
+    }
+}`,
+    },
+  },
+  "stack-min-remove-brackets": {
+    title: "Minimum brackets to remove",
+    explanation:
+      "To compute minimum removals, count extra closing and extra opening brackets. Result = extraClosing + extraOpening.",
+    visual: stackVisuals["stack-min-remove-brackets"],
+    code: {
+      cpp: `#include <iostream>
+#include <string>
+using namespace std;
+
+int minRemove(const string& s) {
+    int open = 0;
+    int remove = 0;
+    for (char c : s) {
+        if (c == '(') open++;
+        else if (c == ')') {
+            if (open > 0) open--;
+            else remove++;
+        }
+    }
+    return remove + open;
+}
+
+int main() {
+    cout << minRemove("(()))(") << endl; // Output: 2
+    return 0;
+}`,
+      java: `public class Main {
+    static int minRemove(String s) {
+        int open = 0;
+        int remove = 0;
+        for (char c : s.toCharArray()) {
+            if (c == '(') open++;
+            else if (c == ')') {
+                if (open > 0) open--;
+                else remove++;
+            }
+        }
+        return remove + open;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(minRemove("(()))(")); // Output: 2
+    }
+}`,
+    },
+  },
+  "stack-longest-valid-parentheses": {
+    title: "Longest valid parentheses",
+    explanation:
+      "Using an index stack, you can compute the length of the longest valid parentheses substring.",
+    visual: stackVisuals["stack-longest-valid-parentheses"],
+    code: {
+      cpp: `#include <iostream>
+#include <stack>
+#include <string>
+using namespace std;
+
+int longestValid(const string& s) {
+    stack<int> st;
+    st.push(-1);
+    int best = 0;
+    for (int i = 0; i < (int)s.size(); i++) {
+        if (s[i] == '(') {
+            st.push(i);
+        } else {
+            st.pop();
+            if (st.empty()) {
+                st.push(i);
+            } else {
+                best = max(best, i - st.top());
+            }
+        }
+    }
+    return best;
+}
+
+int main() {
+    cout << longestValid(")()())") << endl; // Output: 4
+    return 0;
+}`,
+      java: `import java.util.Stack;
+
+public class Main {
+    static int longestValid(String s) {
+        Stack<Integer> st = new Stack<>();
+        st.push(-1);
+        int best = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == '(') {
+                st.push(i);
+            } else {
+                st.pop();
+                if (st.isEmpty()) {
+                    st.push(i);
+                } else {
+                    best = Math.max(best, i - st.peek());
+                }
+            }
+        }
+        return best;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(longestValid(")()())")); // Output: 4
+    }
+}`,
+    },
+  },
+  "stack-infix-expression": {
+    title: "Infix expression",
+    explanation:
+      "In infix notation, the operator appears between operands, e.g., a+b*c. Precedence and parentheses determine order.",
+    visual: stackVisuals["stack-infix-expression"],
+  },
+  "stack-prefix-expression": {
+    title: "Prefix expression",
+    explanation:
+      "In prefix notation, the operator appears before operands, e.g., + a * b c. It requires fewer parentheses.",
+    visual: stackVisuals["stack-prefix-expression"],
+  },
+  "stack-postfix-expression": {
+    title: "Postfix expression",
+    explanation:
+      "In postfix notation, the operator appears after operands, e.g., a b c * +. Stack-based evaluation is straightforward.",
+    visual: stackVisuals["stack-postfix-expression"],
+  },
+  "stack-infix-to-postfix": {
+    title: "Infix -> Postfix",
+    explanation:
+      "To convert infix to postfix, use an operator stack. Operators are popped based on precedence.",
+    visual: stackVisuals["stack-infix-to-postfix"],
+    code: {
+      cpp: `#include <iostream>
+#include <stack>
+#include <string>
+using namespace std;
+
+int precedence(char op) {
+    if (op == '^') return 3;
+    if (op == '*' || op == '/') return 2;
+    if (op == '+' || op == '-') return 1;
+    return 0;
+}
+
+string infixToPostfix(const string& s) {
+    stack<char> st;
+    string out;
+    for (char c : s) {
+        if (isalnum(c)) {
+            out += c;
+        } else if (c == '(') {
+            st.push(c);
+        } else if (c == ')') {
+            while (!st.empty() && st.top() != '(') {
+                out += st.top();
+                st.pop();
+            }
+            if (!st.empty()) st.pop();
+        } else {
+            while (!st.empty() && st.top() != '(' &&
+                   (precedence(st.top()) > precedence(c) ||
+                    (precedence(st.top()) == precedence(c) && c != '^'))) {
+                out += st.top();
+                st.pop();
+            }
+            st.push(c);
+        }
+    }
+    while (!st.empty()) {
+        out += st.top();
+        st.pop();
+    }
+    return out;
+}
+
+int main() {
+    cout << infixToPostfix("a+b*(c-d)") << endl; // Output: abcd-*+
+    return 0;
+}`,
+      java: `import java.util.Stack;
+
+public class Main {
+    static int precedence(char op) {
+        if (op == '^') return 3;
+        if (op == '*' || op == '/') return 2;
+        if (op == '+' || op == '-') return 1;
+        return 0;
+    }
+
+    static String infixToPostfix(String s) {
+        Stack<Character> st = new Stack<>();
+        StringBuilder out = new StringBuilder();
+        for (char c : s.toCharArray()) {
+            if (Character.isLetterOrDigit(c)) {
+                out.append(c);
+            } else if (c == '(') {
+                st.push(c);
+            } else if (c == ')') {
+                while (!st.isEmpty() && st.peek() != '(') out.append(st.pop());
+                if (!st.isEmpty()) st.pop();
+            } else {
+                while (!st.isEmpty() && st.peek() != '(' &&
+                       (precedence(st.peek()) > precedence(c) ||
+                        (precedence(st.peek()) == precedence(c) && c != '^'))) {
+                    out.append(st.pop());
+                }
+                st.push(c);
+            }
+        }
+        while (!st.isEmpty()) out.append(st.pop());
+        return out.toString();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(infixToPostfix("a+b*(c-d)")); // Output: abcd-*+
+    }
+}`,
+    },
+  },
+  "stack-infix-to-prefix": {
+    title: "Infix -> Prefix",
+    explanation:
+      "Reverse the infix expression, swap parentheses, build postfix, then reverse the result to get prefix.",
+    visual: stackVisuals["stack-infix-to-prefix"],
+    code: {
+      cpp: `#include <iostream>
+#include <stack>
+#include <string>
+using namespace std;
+
+int precedence(char op) {
+    if (op == '^') return 3;
+    if (op == '*' || op == '/') return 2;
+    if (op == '+' || op == '-') return 1;
+    return 0;
+}
+
+string infixToPostfix(const string& s) {
+    stack<char> st;
+    string out;
+    for (char c : s) {
+        if (isalnum(c)) out += c;
+        else if (c == '(') st.push(c);
+        else if (c == ')') {
+            while (!st.empty() && st.top() != '(') {
+                out += st.top();
+                st.pop();
+            }
+            if (!st.empty()) st.pop();
+        } else {
+            while (!st.empty() && st.top() != '(' &&
+                   (precedence(st.top()) > precedence(c) ||
+                    (precedence(st.top()) == precedence(c) && c != '^'))) {
+                out += st.top();
+                st.pop();
+            }
+            st.push(c);
+        }
+    }
+    while (!st.empty()) { out += st.top(); st.pop(); }
+    return out;
+}
+
+string infixToPrefix(string s) {
+    reverse(s.begin(), s.end());
+    for (char& c : s) {
+        if (c == '(') c = ')';
+        else if (c == ')') c = '(';
+    }
+    string postfix = infixToPostfix(s);
+    reverse(postfix.begin(), postfix.end());
+    return postfix;
+}
+
+int main() {
+    cout << infixToPrefix("(a+b)*c") << endl; // Output: *+abc
+    return 0;
+}`,
+      java: `import java.util.Stack;
+
+public class Main {
+    static int precedence(char op) {
+        if (op == '^') return 3;
+        if (op == '*' || op == '/') return 2;
+        if (op == '+' || op == '-') return 1;
+        return 0;
+    }
+
+    static String infixToPostfix(String s) {
+        Stack<Character> st = new Stack<>();
+        StringBuilder out = new StringBuilder();
+        for (char c : s.toCharArray()) {
+            if (Character.isLetterOrDigit(c)) out.append(c);
+            else if (c == '(') st.push(c);
+            else if (c == ')') {
+                while (!st.isEmpty() && st.peek() != '(') out.append(st.pop());
+                if (!st.isEmpty()) st.pop();
+            } else {
+                while (!st.isEmpty() && st.peek() != '(' &&
+                       (precedence(st.peek()) > precedence(c) ||
+                        (precedence(st.peek()) == precedence(c) && c != '^'))) {
+                    out.append(st.pop());
+                }
+                st.push(c);
+            }
+        }
+        while (!st.isEmpty()) out.append(st.pop());
+        return out.toString();
+    }
+
+    static String infixToPrefix(String s) {
+        StringBuilder rev = new StringBuilder(s).reverse();
+        for (int i = 0; i < rev.length(); i++) {
+            if (rev.charAt(i) == '(') rev.setCharAt(i, ')');
+            else if (rev.charAt(i) == ')') rev.setCharAt(i, '(');
+        }
+        String postfix = infixToPostfix(rev.toString());
+        return new StringBuilder(postfix).reverse().toString();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(infixToPrefix("(a+b)*c")); // Output: *+abc
+    }
+}`,
+    },
+  },
+  "stack-prefix-to-infix": {
+    title: "Prefix -> Infix",
+    explanation:
+      "Scan the prefix expression right-to-left, push operands onto the stack, and combine when an operator appears.",
+    visual: stackVisuals["stack-prefix-to-infix"],
+    code: {
+      cpp: `#include <iostream>
+#include <stack>
+#include <string>
+using namespace std;
+
+string prefixToInfix(const string& s) {
+    stack<string> st;
+    for (int i = (int)s.size() - 1; i >= 0; i--) {
+        char c = s[i];
+        if (isalnum(c)) {
+            st.push(string(1, c));
+        } else {
+            string a = st.top(); st.pop();
+            string b = st.top(); st.pop();
+            string exp = "(" + a + c + b + ")";
+            st.push(exp);
+        }
+    }
+    return st.top();
+}
+
+int main() {
+    cout << prefixToInfix("*+ab-cd") << endl; // Output: ((a+b)*(c-d))
+    return 0;
+}`,
+      java: `import java.util.Stack;
+
+public class Main {
+    static String prefixToInfix(String s) {
+        Stack<String> st = new Stack<>();
+        for (int i = s.length() - 1; i >= 0; i--) {
+            char c = s.charAt(i);
+            if (Character.isLetterOrDigit(c)) {
+                st.push(String.valueOf(c));
+            } else {
+                String a = st.pop();
+                String b = st.pop();
+                st.push("(" + a + c + b + ")");
+            }
+        }
+        return st.peek();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(prefixToInfix("*+ab-cd")); // Output: ((a+b)*(c-d))
+    }
+}`,
+    },
+  },
+  "stack-postfix-to-infix": {
+    title: "Postfix -> Infix",
+    explanation:
+      "Scan the postfix expression left-to-right, push operands onto the stack, and combine when an operator appears.",
+    visual: stackVisuals["stack-postfix-to-infix"],
+    code: {
+      cpp: `#include <iostream>
+#include <stack>
+#include <string>
+using namespace std;
+
+string postfixToInfix(const string& s) {
+    stack<string> st;
+    for (char c : s) {
+        if (isalnum(c)) {
+            st.push(string(1, c));
+        } else {
+            string b = st.top(); st.pop();
+            string a = st.top(); st.pop();
+            string exp = "(" + a + c + b + ")";
+            st.push(exp);
+        }
+    }
+    return st.top();
+}
+
+int main() {
+    cout << postfixToInfix("ab+cd-*") << endl; // Output: ((a+b)*(c-d))
+    return 0;
+}`,
+      java: `import java.util.Stack;
+
+public class Main {
+    static String postfixToInfix(String s) {
+        Stack<String> st = new Stack<>();
+        for (char c : s.toCharArray()) {
+            if (Character.isLetterOrDigit(c)) {
+                st.push(String.valueOf(c));
+            } else {
+                String b = st.pop();
+                String a = st.pop();
+                st.push("(" + a + c + b + ")");
+            }
+        }
+        return st.peek();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(postfixToInfix("ab+cd-*")); // Output: ((a+b)*(c-d))
+    }
+}`,
+    },
+  },
+  "stack-evaluate-postfix": {
+    title: "Evaluate postfix expression",
+    explanation:
+      "In postfix evaluation, operands are pushed onto the stack; when an operator appears, pop the top two values and push the result.",
+    visual: stackVisuals["stack-evaluate-postfix"],
+    code: {
+      cpp: `#include <iostream>
+#include <stack>
+#include <sstream>
+#include <string>
+#include <cctype>
+using namespace std;
+
+int applyOp(int a, int b, const string& op) {
+    if (op == "+") return a + b;
+    if (op == "-") return a - b;
+    if (op == "*") return a * b;
+    return a / b;
+}
+
+int evaluatePostfix(const string& expr) {
+    stack<int> st;
+    stringstream ss(expr);
+    string token;
+    while (ss >> token) {
+        if (token.size() > 1 || isdigit(token[0])) {
+            st.push(stoi(token));
+        } else {
+            int b = st.top(); st.pop();
+            int a = st.top(); st.pop();
+            st.push(applyOp(a, b, token));
+        }
+    }
+    return st.top();
+}
+
+int main() {
+    cout << evaluatePostfix("2 3 4 * +") << endl; // Output: 14
+    return 0;
+}`,
+      java: `import java.util.Stack;
+
+public class Main {
+    static int applyOp(int a, int b, String op) {
+        if (op.equals("+")) return a + b;
+        if (op.equals("-")) return a - b;
+        if (op.equals("*")) return a * b;
+        return a / b;
+    }
+
+    static int evaluatePostfix(String expr) {
+        Stack<Integer> st = new Stack<>();
+        String[] tokens = expr.split("\\\\s+");
+        for (String token : tokens) {
+            if (token.length() > 1 || Character.isDigit(token.charAt(0))) {
+                st.push(Integer.parseInt(token));
+            } else {
+                int b = st.pop();
+                int a = st.pop();
+                st.push(applyOp(a, b, token));
+            }
+        }
+        return st.peek();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(evaluatePostfix("2 3 4 * +")); // Output: 14
+    }
+}`,
+    },
+  },
+  "stack-evaluate-prefix": {
+    title: "Evaluate prefix expression",
+    explanation:
+      "In prefix evaluation, scan the expression right-to-left using a stack.",
+    visual: stackVisuals["stack-evaluate-prefix"],
+    code: {
+      cpp: `#include <iostream>
+#include <stack>
+#include <sstream>
+#include <vector>
+#include <string>
+#include <cctype>
+using namespace std;
+
+int applyOp(int a, int b, const string& op) {
+    if (op == "+") return a + b;
+    if (op == "-") return a - b;
+    if (op == "*") return a * b;
+    return a / b;
+}
+
+int evaluatePrefix(const string& expr) {
+    vector<string> tokens;
+    stringstream ss(expr);
+    string token;
+    while (ss >> token) tokens.push_back(token);
+
+    stack<int> st;
+    for (int i = (int)tokens.size() - 1; i >= 0; i--) {
+        string t = tokens[i];
+        if (t.size() > 1 || isdigit(t[0])) {
+            st.push(stoi(t));
+        } else {
+            int a = st.top(); st.pop();
+            int b = st.top(); st.pop();
+            st.push(applyOp(a, b, t));
+        }
+    }
+    return st.top();
+}
+
+int main() {
+    cout << evaluatePrefix("+ 2 * 3 4") << endl; // Output: 14
+    return 0;
+}`,
+      java: `import java.util.Stack;
+
+public class Main {
+    static int applyOp(int a, int b, String op) {
+        if (op.equals("+")) return a + b;
+        if (op.equals("-")) return a - b;
+        if (op.equals("*")) return a * b;
+        return a / b;
+    }
+
+    static int evaluatePrefix(String expr) {
+        String[] tokens = expr.split("\\\\s+");
+        Stack<Integer> st = new Stack<>();
+        for (int i = tokens.length - 1; i >= 0; i--) {
+            String t = tokens[i];
+            if (t.length() > 1 || Character.isDigit(t.charAt(0))) {
+                st.push(Integer.parseInt(t));
+            } else {
+                int a = st.pop();
+                int b = st.pop();
+                st.push(applyOp(a, b, t));
+            }
+        }
+        return st.peek();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(evaluatePrefix("+ 2 * 3 4")); // Output: 14
+    }
+}`,
+    },
+  },
+  "stack-next-greater": {
+    title: "Next greater element",
+    explanation:
+      "For each element, find the next greater element to its right. A monotonic decreasing stack is used.",
+    visual: stackVisuals["stack-next-greater"],
+    code: {
+      cpp: `#include <iostream>
+#include <vector>
+#include <stack>
+#include <algorithm>
+using namespace std;
+
+vector<int> nextGreater(vector<int>& arr) {
+    int n = arr.size();
+    vector<int> ans(n, -1);
+    stack<int> st;
+    for (int i = n - 1; i >= 0; i--) {
+        while (!st.empty() && st.top() <= arr[i]) st.pop();
+        ans[i] = st.empty() ? -1 : st.top();
+        st.push(arr[i]);
+    }
+    return ans;
+}
+
+int main() {
+    vector<int> arr = {4, 5, 2, 25};
+    vector<int> ans = nextGreater(arr);
+    for (int x : ans) cout << x << " "; // Output: 5 25 25 -1
+    return 0;
+}`,
+      java: `import java.util.Stack;
+
+public class Main {
+    static int[] nextGreater(int[] arr) {
+        int n = arr.length;
+        int[] ans = new int[n];
+        Stack<Integer> st = new Stack<>();
+        for (int i = n - 1; i >= 0; i--) {
+            while (!st.isEmpty() && st.peek() <= arr[i]) st.pop();
+            ans[i] = st.isEmpty() ? -1 : st.peek();
+            st.push(arr[i]);
+        }
+        return ans;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {4, 5, 2, 25};
+        int[] ans = nextGreater(arr);
+        for (int x : ans) System.out.print(x + " "); // Output: 5 25 25 -1
+    }
+}`,
+    },
+  },
+  "stack-next-smaller": {
+    title: "Next smaller element",
+    explanation:
+      "For the next smaller element, maintain a monotonic increasing stack.",
+    visual: stackVisuals["stack-next-smaller"],
+    code: {
+      cpp: `#include <iostream>
+#include <vector>
+#include <stack>
+#include <cstdlib>
+using namespace std;
+
+vector<int> nextSmaller(vector<int>& arr) {
+    int n = arr.size();
+    vector<int> ans(n, -1);
+    stack<int> st;
+    for (int i = n - 1; i >= 0; i--) {
+        while (!st.empty() && st.top() >= arr[i]) st.pop();
+        ans[i] = st.empty() ? -1 : st.top();
+        st.push(arr[i]);
+    }
+    return ans;
+}
+
+int main() {
+    vector<int> arr = {4, 5, 2, 10};
+    vector<int> ans = nextSmaller(arr);
+    for (int x : ans) cout << x << " "; // Output: 2 2 -1 -1
+    return 0;
+}`,
+      java: `import java.util.Stack;
+
+public class Main {
+    static int[] nextSmaller(int[] arr) {
+        int n = arr.length;
+        int[] ans = new int[n];
+        Stack<Integer> st = new Stack<>();
+        for (int i = n - 1; i >= 0; i--) {
+            while (!st.isEmpty() && st.peek() >= arr[i]) st.pop();
+            ans[i] = st.isEmpty() ? -1 : st.peek();
+            st.push(arr[i]);
+        }
+        return ans;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {4, 5, 2, 10};
+        int[] ans = nextSmaller(arr);
+        for (int x : ans) System.out.print(x + " "); // Output: 2 2 -1 -1
+    }
+}`,
+    },
+  },
+  "stack-prev-greater": {
+    title: "Previous greater element",
+    explanation:
+      "For the previous greater element, traverse left-to-right with a monotonic decreasing stack.",
+    visual: stackVisuals["stack-prev-greater"],
+    code: {
+      cpp: `#include <iostream>
+#include <vector>
+#include <stack>
+using namespace std;
+
+vector<int> prevGreater(vector<int>& arr) {
+    int n = arr.size();
+    vector<int> ans(n, -1);
+    stack<int> st;
+    for (int i = 0; i < n; i++) {
+        while (!st.empty() && st.top() <= arr[i]) st.pop();
+        ans[i] = st.empty() ? -1 : st.top();
+        st.push(arr[i]);
+    }
+    return ans;
+}
+
+int main() {
+    vector<int> arr = {10, 4, 2, 20, 40, 12};
+    vector<int> ans = prevGreater(arr);
+    for (int x : ans) cout << x << " "; // Output: -1 10 4 -1 -1 40
+    return 0;
+}`,
+      java: `import java.util.Stack;
+
+public class Main {
+    static int[] prevGreater(int[] arr) {
+        int n = arr.length;
+        int[] ans = new int[n];
+        Stack<Integer> st = new Stack<>();
+        for (int i = 0; i < n; i++) {
+            while (!st.isEmpty() && st.peek() <= arr[i]) st.pop();
+            ans[i] = st.isEmpty() ? -1 : st.peek();
+            st.push(arr[i]);
+        }
+        return ans;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {10, 4, 2, 20, 40, 12};
+        int[] ans = prevGreater(arr);
+        for (int x : ans) System.out.print(x + " "); // Output: -1 10 4 -1 -1 40
+    }
+}`,
+    },
+  },
+  "stack-prev-smaller": {
+    title: "Previous smaller element",
+    explanation:
+      "For the previous smaller element, traverse left-to-right with a monotonic increasing stack.",
+    visual: stackVisuals["stack-prev-smaller"],
+    code: {
+      cpp: `#include <iostream>
+#include <vector>
+#include <stack>
+using namespace std;
+
+vector<int> prevSmaller(vector<int>& arr) {
+    int n = arr.size();
+    vector<int> ans(n, -1);
+    stack<int> st;
+    for (int i = 0; i < n; i++) {
+        while (!st.empty() && st.top() >= arr[i]) st.pop();
+        ans[i] = st.empty() ? -1 : st.top();
+        st.push(arr[i]);
+    }
+    return ans;
+}
+
+int main() {
+    vector<int> arr = {10, 4, 2, 20, 40, 12};
+    vector<int> ans = prevSmaller(arr);
+    for (int x : ans) cout << x << " "; // Output: -1 -1 -1 2 20 2
+    return 0;
+}`,
+      java: `import java.util.Stack;
+
+public class Main {
+    static int[] prevSmaller(int[] arr) {
+        int n = arr.length;
+        int[] ans = new int[n];
+        Stack<Integer> st = new Stack<>();
+        for (int i = 0; i < n; i++) {
+            while (!st.isEmpty() && st.peek() >= arr[i]) st.pop();
+            ans[i] = st.isEmpty() ? -1 : st.peek();
+            st.push(arr[i]);
+        }
+        return ans;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {10, 4, 2, 20, 40, 12};
+        int[] ans = prevSmaller(arr);
+        for (int x : ans) System.out.print(x + " "); // Output: -1 -1 -1 2 20 2
+    }
+}`,
+    },
+  },
+  "stack-circular-next-greater": {
+    title: "Circular next greater element",
+    explanation:
+      "For circular arrays, use a 2N traversal and an index stack to find the next greater element.",
+    visual: stackVisuals["stack-circular-next-greater"],
+    code: {
+      cpp: `#include <iostream>
+#include <vector>
+#include <stack>
+using namespace std;
+
+vector<int> nextGreaterCircular(vector<int>& arr) {
+    int n = arr.size();
+    vector<int> ans(n, -1);
+    stack<int> st;
+    for (int i = 2 * n - 1; i >= 0; i--) {
+        int idx = i % n;
+        while (!st.empty() && arr[st.top()] <= arr[idx]) st.pop();
+        if (i < n) ans[idx] = st.empty() ? -1 : arr[st.top()];
+        st.push(idx);
+    }
+    return ans;
+}
+
+int main() {
+    vector<int> arr = {1, 2, 1};
+    vector<int> ans = nextGreaterCircular(arr);
+    for (int x : ans) cout << x << " "; // Output: 2 -1 2
+    return 0;
+}`,
+      java: `import java.util.Stack;
+
+public class Main {
+    static int[] nextGreaterCircular(int[] arr) {
+        int n = arr.length;
+        int[] ans = new int[n];
+        Stack<Integer> st = new Stack<>();
+        for (int i = 2 * n - 1; i >= 0; i--) {
+            int idx = i % n;
+            while (!st.isEmpty() && arr[st.peek()] <= arr[idx]) st.pop();
+            if (i < n) ans[idx] = st.isEmpty() ? -1 : arr[st.peek()];
+            st.push(idx);
+        }
+        return ans;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 1};
+        int[] ans = nextGreaterCircular(arr);
+        for (int x : ans) System.out.print(x + " "); // Output: 2 -1 2
+    }
+}`,
+    },
+  },
+  "stack-stock-span": {
+    title: "Stock span problem",
+    explanation:
+      "For each day, count consecutive days where price <= current price. Stack stores indices.",
+    visual: stackVisuals["stack-stock-span"],
+    code: {
+      cpp: `#include <iostream>
+#include <vector>
+#include <stack>
+using namespace std;
+
+vector<int> stockSpan(vector<int>& price) {
+    int n = price.size();
+    vector<int> span(n, 1);
+    stack<int> st;
+    for (int i = 0; i < n; i++) {
+        while (!st.empty() && price[st.top()] <= price[i]) st.pop();
+        span[i] = st.empty() ? i + 1 : i - st.top();
+        st.push(i);
+    }
+    return span;
+}
+
+int main() {
+    vector<int> price = {100, 80, 60, 70, 60, 75, 85};
+    vector<int> span = stockSpan(price);
+    for (int x : span) cout << x << " "; // Output: 1 1 1 2 1 4 6
+    return 0;
+}`,
+      java: `import java.util.Stack;
+
+public class Main {
+    static int[] stockSpan(int[] price) {
+        int n = price.length;
+        int[] span = new int[n];
+        Stack<Integer> st = new Stack<>();
+        for (int i = 0; i < n; i++) {
+            while (!st.isEmpty() && price[st.peek()] <= price[i]) st.pop();
+            span[i] = st.isEmpty() ? i + 1 : i - st.peek();
+            st.push(i);
+        }
+        return span;
+    }
+
+    public static void main(String[] args) {
+        int[] price = {100, 80, 60, 70, 60, 75, 85};
+        int[] span = stockSpan(price);
+        for (int x : span) System.out.print(x + " "); // Output: 1 1 1 2 1 4 6
+    }
+}`,
+    },
+  },
+  "stack-largest-rectangle-histogram": {
+    title: "Largest rectangle in histogram",
+    explanation:
+      "To find the largest rectangle in a histogram, store indices in a stack and compute widths.",
+    visual: stackVisuals["stack-largest-rectangle-histogram"],
+    code: {
+      cpp: `#include <iostream>
+#include <vector>
+#include <stack>
+#include <algorithm>
+using namespace std;
+
+int largestRectangle(vector<int>& h) {
+    int n = h.size();
+    stack<int> st;
+    int best = 0;
+    for (int i = 0; i <= n; i++) {
+        int cur = (i == n) ? 0 : h[i];
+        while (!st.empty() && cur < h[st.top()]) {
+            int height = h[st.top()];
+            st.pop();
+            int right = i;
+            int left = st.empty() ? 0 : st.top() + 1;
+            best = max(best, height * (right - left));
+        }
+        st.push(i);
+    }
+    return best;
+}
+
+int main() {
+    vector<int> h = {2, 1, 5, 6, 2, 3};
+    cout << largestRectangle(h) << endl; // Output: 10
+    return 0;
+}`,
+      java: `import java.util.Stack;
+
+public class Main {
+    static int largestRectangle(int[] h) {
+        int n = h.length;
+        Stack<Integer> st = new Stack<>();
+        int best = 0;
+        for (int i = 0; i <= n; i++) {
+            int cur = (i == n) ? 0 : h[i];
+            while (!st.isEmpty() && cur < h[st.peek()]) {
+                int height = h[st.pop()];
+                int right = i;
+                int left = st.isEmpty() ? 0 : st.peek() + 1;
+                best = Math.max(best, height * (right - left));
+            }
+            st.push(i);
+        }
+        return best;
+    }
+
+    public static void main(String[] args) {
+        int[] h = {2, 1, 5, 6, 2, 3};
+        System.out.println(largestRectangle(h)); // Output: 10
+    }
+}`,
+    },
+  },
+  "stack-trapping-rain-water": {
+    title: "Trapping rain water",
+    explanation:
+      "To calculate trapped water between bars, use a stack of indices.",
+    visual: stackVisuals["stack-trapping-rain-water"],
+    code: {
+      cpp: `#include <iostream>
+#include <vector>
+#include <stack>
+using namespace std;
+
+int trap(vector<int>& h) {
+    stack<int> st;
+    int water = 0;
+    for (int i = 0; i < (int)h.size(); i++) {
+        while (!st.empty() && h[i] > h[st.top()]) {
+            int top = st.top();
+            st.pop();
+            if (st.empty()) break;
+            int distance = i - st.top() - 1;
+            int bounded = min(h[i], h[st.top()]) - h[top];
+            water += distance * bounded;
+        }
+        st.push(i);
+    }
+    return water;
+}
+
+int main() {
+    vector<int> h = {0,1,0,2,1,0,1,3,2,1,2,1};
+    cout << trap(h) << endl; // Output: 6
+    return 0;
+}`,
+      java: `import java.util.Stack;
+
+public class Main {
+    static int trap(int[] h) {
+        Stack<Integer> st = new Stack<>();
+        int water = 0;
+        for (int i = 0; i < h.length; i++) {
+            while (!st.isEmpty() && h[i] > h[st.peek()]) {
+                int top = st.pop();
+                if (st.isEmpty()) break;
+                int distance = i - st.peek() - 1;
+                int bounded = Math.min(h[i], h[st.peek()]) - h[top];
+                water += distance * bounded;
+            }
+            st.push(i);
+        }
+        return water;
+    }
+
+    public static void main(String[] args) {
+        int[] h = {0,1,0,2,1,0,1,3,2,1,2,1};
+        System.out.println(trap(h)); // Output: 6
+    }
+}`,
+    },
+  },
+  "stack-asteroid-collision": {
+    title: "Asteroid collision",
+    explanation:
+      "Simulate asteroids with a stack. Positive moves right, negative moves left. In collisions, the smaller one explodes.",
+    visual: stackVisuals["stack-asteroid-collision"],
+    code: {
+      cpp: `#include <iostream>
+#include <vector>
+#include <stack>
+using namespace std;
+
+vector<int> asteroidCollision(vector<int>& ast) {
+    vector<int> st;
+    for (int a : ast) {
+        bool alive = true;
+        while (alive && !st.empty() && a < 0 && st.back() > 0) {
+            if (abs(st.back()) < abs(a)) {
+                st.pop_back();
+                continue;
+            } else if (abs(st.back()) == abs(a)) {
+                st.pop_back();
+                alive = false;
+            } else {
+                alive = false;
+            }
+        }
+        if (alive) st.push_back(a);
+    }
+    return st;
+}
+
+int main() {
+    vector<int> ast = {5, 10, -5};
+    vector<int> res = asteroidCollision(ast);
+    for (int x : res) cout << x << " "; // Output: 5 10
+    return 0;
+}`,
+      java: `import java.util.ArrayList;
+
+public class Main {
+    static int[] asteroidCollision(int[] ast) {
+        ArrayList<Integer> st = new ArrayList<>();
+        for (int a : ast) {
+            boolean alive = true;
+            while (alive && !st.isEmpty() && a < 0 && st.get(st.size() - 1) > 0) {
+                int top = st.get(st.size() - 1);
+                if (Math.abs(top) < Math.abs(a)) {
+                    st.remove(st.size() - 1);
+                    continue;
+                } else if (Math.abs(top) == Math.abs(a)) {
+                    st.remove(st.size() - 1);
+                    alive = false;
+                } else {
+                    alive = false;
+                }
+            }
+            if (alive) st.add(a);
+        }
+        int[] res = new int[st.size()];
+        for (int i = 0; i < st.size(); i++) res[i] = st.get(i);
+        return res;
+    }
+
+    public static void main(String[] args) {
+        int[] ast = {5, 10, -5};
+        int[] res = asteroidCollision(ast);
+        for (int x : res) System.out.print(x + " "); // Output: 5 10
+    }
+}`,
+    },
+  },
+  "stack-remove-k-digits": {
+    title: "Remove K digits",
+    explanation:
+      "To make the number smallest, use a monotonic increasing stack. When the current digit is smaller and k > 0, pop larger digits from the stack.",
+    visual: stackVisuals["stack-remove-k-digits"],
+    code: {
+      cpp: `#include <iostream>
+#include <string>
+using namespace std;
+
+string removeKdigits(string num, int k) {
+    string st;
+    for (char c : num) {
+        while (k > 0 && !st.empty() && st.back() > c) {
+            st.pop_back();
+            k--;
+        }
+        if (!st.empty() || c != '0') st.push_back(c);
+    }
+    while (k > 0 && !st.empty()) {
+        st.pop_back();
+        k--;
+    }
+    return st.empty() ? "0" : st;
+}
+
+int main() {
+    string num = "1432219";
+    int k = 3;
+    cout << removeKdigits(num, k) << endl; // Output: 1219
+    return 0;
+}`,
+      java: `public class Main {
+    static String removeKdigits(String num, int k) {
+        StringBuilder st = new StringBuilder();
+        for (int i = 0; i < num.length(); i++) {
+            char c = num.charAt(i);
+            while (k > 0 && st.length() > 0 && st.charAt(st.length() - 1) > c) {
+                st.deleteCharAt(st.length() - 1);
+                k--;
+            }
+            if (st.length() > 0 || c != '0') st.append(c);
+        }
+        while (k > 0 && st.length() > 0) {
+            st.deleteCharAt(st.length() - 1);
+            k--;
+        }
+        return st.length() == 0 ? "0" : st.toString();
+    }
+
+    public static void main(String[] args) {
+        String num = "1432219";
+        int k = 3;
+        System.out.println(removeKdigits(num, k)); // Output: 1219
+    }
+}`,
     },
   },
 };

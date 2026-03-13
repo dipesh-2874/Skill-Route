@@ -3,7 +3,7 @@ const dsaLearningPath = {
     title: "DSA Learning Router",
     subtitle:
       "Select a topic card below to view its detailed, phase-wise roadmap. You can click on the roadmap points to see practical code examples.",
-    audience: "Current focus: Arrays, Strings, and Recursion."
+    audience: "Current focus: Arrays, Strings, Recursion, and Stacks."
   },
   topics: [
     {
@@ -23,6 +23,12 @@ const dsaLearningPath = {
       title: "Recursion",
       shortDescription:
         "Beginner-to-advanced recursion roadmap with important interview questions."
+    },
+    {
+      id: "stacks",
+      title: "Stacks",
+      shortDescription:
+        "Stack fundamentals, implementations, applications, and classic problems."
     },
     {
       id: "linkedlist",
@@ -407,6 +413,163 @@ const dsaLearningPath = {
               ]
             }
           ]
+        }
+      ]
+    },
+    stacks: {
+      title: "Stacks Roadmap",
+      intro:
+        "Stacks are LIFO data structures used everywhere: parsing, backtracking, undo/redo, and monotonic patterns. Learn the core operations first, then implementations and classic problems.",
+      phases: [
+        {
+          id: "stack-phase-1",
+          title: "PHASE 1: STACK BASICS (Beginner)",
+          sections: [
+            {
+              heading: "1) Core Concepts",
+              points: [
+                { id: "stack-definition", title: "What is a Stack" },
+                { id: "stack-lifo", title: "LIFO (Last In First Out) concept" },
+                { id: "stack-memory-representation", title: "Stack memory representation" },
+                { id: "stack-operations-overview", title: "Stack operations" },
+                { id: "stack-push", title: "push()" },
+                { id: "stack-pop", title: "pop()" },
+                { id: "stack-peek", title: "peek() / top()" },
+                { id: "stack-is-empty", title: "isEmpty()" },
+                { id: "stack-is-full", title: "isFull()" },
+                { id: "stack-overflow", title: "Stack overflow" },
+                { id: "stack-underflow", title: "Stack underflow" },
+                { id: "stack-time-complexity", title: "Time complexity of stack operations" }
+              ]
+            }
+          ],
+          note: "Mindset: Treat the stack top as the single source of truth."
+        },
+        {
+          id: "stack-phase-2",
+          title: "PHASE 2: STACK IMPLEMENTATION",
+          sections: [
+            {
+              heading: "2) Array Based Stack",
+              points: [
+                { id: "stack-array-implementation", title: "Array-based Stack" },
+                { id: "stack-static", title: "Static stack" },
+                { id: "stack-overflow-handling", title: "Overflow handling" }
+              ]
+            },
+            {
+              heading: "3) Linked List Based Stack",
+              points: [
+                { id: "stack-linkedlist-implementation", title: "Linked-list Stack" },
+                { id: "stack-dynamic", title: "Dynamic stack" },
+                { id: "stack-memory-allocation", title: "Memory allocation" }
+              ]
+            },
+            {
+              heading: "4) Built-in Stacks",
+              points: [
+                { id: "stack-built-in", title: "Built-in Stack" },
+                { id: "stack-java-class", title: "Java Stack class" },
+                { id: "stack-cpp-stl", title: "C++ STL stack" },
+                { id: "stack-python-list", title: "Python stack (list)" }
+              ]
+            }
+          ]
+        },
+        {
+          id: "stack-phase-3",
+          title: "PHASE 3: BASIC STACK APPLICATIONS",
+          sections: [
+            {
+              heading: "5) Beginner Applications",
+              points: [
+                { id: "stack-reverse-string", title: "Reverse string using stack" },
+                { id: "stack-reverse-array", title: "Reverse array using stack" },
+                { id: "stack-palindrome-check", title: "Checking palindrome using stack" },
+                { id: "stack-undo-redo", title: "Undo / Redo functionality" },
+                { id: "stack-browser-history", title: "Browser history navigation" }
+              ]
+            }
+          ]
+        },
+        {
+          id: "stack-phase-4",
+          title: "PHASE 4: PARENTHESES PROBLEMS",
+          sections: [
+            {
+              heading: "6) Parentheses Mastery",
+              points: [
+                { id: "stack-balanced-parentheses", title: "Balanced parentheses" },
+                { id: "stack-valid-parentheses", title: "Valid parentheses" },
+                { id: "stack-redundant-brackets", title: "Redundant brackets" },
+                { id: "stack-min-remove-brackets", title: "Minimum brackets to remove" },
+                { id: "stack-longest-valid-parentheses", title: "Longest valid parentheses" }
+              ]
+            }
+          ]
+        },
+        {
+          id: "stack-phase-5",
+          title: "PHASE 5: EXPRESSION PROBLEMS (Important)",
+          sections: [
+            {
+              heading: "7) Expression Types",
+              points: [
+                { id: "stack-infix-expression", title: "Infix expression" },
+                { id: "stack-prefix-expression", title: "Prefix expression" },
+                { id: "stack-postfix-expression", title: "Postfix expression" }
+              ]
+            },
+            {
+              heading: "8) Conversions",
+              points: [
+                { id: "stack-infix-to-postfix", title: "Infix -> Postfix" },
+                { id: "stack-infix-to-prefix", title: "Infix -> Prefix" },
+                { id: "stack-prefix-to-infix", title: "Prefix -> Infix" },
+                { id: "stack-postfix-to-infix", title: "Postfix -> Infix" }
+              ]
+            },
+            {
+              heading: "9) Evaluation",
+              points: [
+                { id: "stack-evaluate-postfix", title: "Evaluate postfix expression" },
+                { id: "stack-evaluate-prefix", title: "Evaluate prefix expression" }
+              ]
+            }
+          ]
+        },
+        {
+          id: "stack-phase-6",
+          title: "PHASE 6: MONOTONIC STACK (Very Important)",
+          sections: [
+            {
+              heading: "10) Next/Previous Elements",
+              points: [
+                { id: "stack-next-greater", title: "Next greater element" },
+                { id: "stack-next-smaller", title: "Next smaller element" },
+                { id: "stack-prev-greater", title: "Previous greater element" },
+                { id: "stack-prev-smaller", title: "Previous smaller element" },
+                { id: "stack-circular-next-greater", title: "Circular next greater element" }
+              ]
+            }
+          ]
+        },
+        {
+          id: "stack-phase-7",
+          title: "PHASE 7: CLASSIC STACK PROBLEMS",
+          sections: [
+            {
+              heading: "11) Interview Classics",
+              points: [
+                { id: "stack-stock-span", title: "Stock span problem" },
+                { id: "stack-largest-rectangle-histogram", title: "Largest rectangle in histogram" },
+                { id: "stack-trapping-rain-water", title: "Trapping rain water" },
+                { id: "stack-asteroid-collision", title: "Asteroid collision" },
+                { id: "stack-remove-k-digits", title: "Remove K digits" }
+              ]
+            }
+          ],
+          note: "Mindset: Understand monotonic stack patterns with a dry run before coding."
         }
       ]
     },
